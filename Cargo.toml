@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Ericson Soares <ericson@spacedrive.com>"]
 edition = "2021"
 license = "AGPL-3.0-only"
-repository = "https://github.com/spacedriveapp/cloud-schema"
+repository = "https://github.com/spacedriveapp/cloud-services-schema"
 rust-version = "1.79.0"
 resolver = "2"
 
