@@ -27,6 +27,8 @@
 #![forbid(deprecated_in_future)]
 #![allow(clippy::missing_errors_doc, clippy::module_name_repetitions)]
 
+// Re-exporting the opaque-ke crate
+pub use opaque_ke;
 use quic_rpc::{RpcClient, ServiceConnection};
 
 pub use error::Error;
@@ -39,6 +41,16 @@ mod utils;
 
 declare_requests!(sync);
 declare_responses!(children_responses = [sync]);
+
+pub struct SpacedriveCipherSuite<'sd> {
+	phantom: std::marker::PhantomData<&'sd ()>,
+}
+impl<'sd> opaque_ke::CipherSuite for SpacedriveCipherSuite<'sd> {
+	type OprfCs = opaque_ke::Ristretto255;
+	type KeGroup = opaque_ke::Ristretto255;
+	type KeyExchange = opaque_ke::key_exchange::tripledh::TripleDh;
+	type Ksf = argon2::Argon2<'sd>;
+}
 
 #[derive(Copy, Clone, Debug)]
 pub struct Service;

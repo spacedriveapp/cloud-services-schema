@@ -1,6 +1,6 @@
 use quic_rpc::declare_rpc;
 
-use crate::{declare_inner_client_rpc_calls, declare_requests, declare_responses, Error, sync};
+use crate::{declare_inner_client_rpc_calls, declare_requests, declare_responses, sync, Error};
 
 declare_inner_client_rpc_calls!(
 	sync::Service,
