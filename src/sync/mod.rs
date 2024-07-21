@@ -29,7 +29,7 @@ declare_client_rpc_calls!(
 	bidirectional_stream = []
 );
 
-declare_requests!(groups, messages, get_sync_key, instance_hello);
+declare_requests!(rpc = [groups, messages, get_sync_key, instance_hello]);
 declare_responses!(
 	children_responses = [messages, groups],
 	get_sync_key,

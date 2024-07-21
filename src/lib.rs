@@ -29,27 +29,27 @@
 
 // Re-exporting the opaque-ke crate
 pub use opaque_ke;
-use quic_rpc::{RpcClient, ServiceConnection};
 
 pub use error::Error;
 
 pub mod auth;
+pub mod devices;
 mod error;
+mod macros;
 pub mod sync;
 pub mod user_side;
-mod utils;
+pub mod users;
 
-declare_requests!(sync);
-declare_responses!(children_responses = [sync]);
+declare_requests!(rpc = [sync, users, devices]);
+declare_responses!(children_responses = [sync, users, devices]);
 
-pub struct SpacedriveCipherSuite<'sd> {
-	phantom: std::marker::PhantomData<&'sd ()>,
-}
-impl<'sd> opaque_ke::CipherSuite for SpacedriveCipherSuite<'sd> {
+pub struct SpacedriveCipherSuite;
+
+impl opaque_ke::CipherSuite for SpacedriveCipherSuite {
 	type OprfCs = opaque_ke::Ristretto255;
 	type KeGroup = opaque_ke::Ristretto255;
 	type KeyExchange = opaque_ke::key_exchange::tripledh::TripleDh;
-	type Ksf = argon2::Argon2<'sd>;
+	type Ksf = argon2::Argon2<'static>;
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -59,23 +59,8 @@ impl quic_rpc::Service for Service {
 	type Res = Response;
 }
 
-#[derive(Debug, Clone)]
-pub struct Client<S: quic_rpc::Service, C: ServiceConnection<S>> {
-	sync: sync::Client<C, S>,
-}
-
-impl<S, C> Client<S, C>
-where
-	S: quic_rpc::Service,
-	C: ServiceConnection<S>,
-{
-	pub fn new(client: RpcClient<S, C, Service>) -> Self {
-		Self {
-			sync: sync::Client::new(client.map()),
-		}
-	}
-
-	pub const fn sync(&self) -> &sync::Client<C, S> {
-		&self.sync
-	}
-}
+declare_client!(
+	Service,
+	nested_service_clients = [sync],
+	child_clients = [users, devices]
+);

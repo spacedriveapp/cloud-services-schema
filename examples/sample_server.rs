@@ -116,6 +116,7 @@ impl App {
 	) -> Result<(), RpcServerError<impl ConnectionErrors>> {
 		match req {
 			Request::Sync(req) => self.sync.handle_rpc_request(req, chan.map()).await?,
+			_ => unimplemented!(),
 		};
 		Ok(())
 	}

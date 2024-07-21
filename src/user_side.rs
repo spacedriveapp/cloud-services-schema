@@ -33,7 +33,7 @@ pub enum UserSideError {
 	FailedToEncryptSyncAESKey,
 }
 
-declare_requests!(authorize_new_instance);
+declare_requests!(rpc = [authorize_new_instance]);
 declare_responses!(UserSideError, authorize_new_instance);
 
 pub mod authorize_new_instance {

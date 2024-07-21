@@ -10,7 +10,7 @@ declare_inner_client_rpc_calls!(
 	bidirectional_stream = []
 );
 
-declare_requests!(parent -> sync::Request, push);
+declare_requests!(parent -> sync::Request, rpc = [push]);
 declare_responses!(parent -> sync::Response, push);
 
 declare_rpc!(sync::Service, push::Request, Result<push::Response, crate::Error>);
