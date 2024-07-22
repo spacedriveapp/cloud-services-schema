@@ -1,4 +1,7 @@
-use crate::{auth::AccessToken, SpacedriveCipherSuite};
+use crate::{
+	auth::{AccessToken, DevicePublicKey, ServerSecretKey},
+	SpacedriveCipherSuite,
+};
 
 use std::fmt;
 
@@ -13,6 +16,7 @@ pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
 	pub connection_id: NodeTicket,
+	pub public_key: DevicePublicKey,
 	pub opaque_login_message: Box<CredentialRequest<SpacedriveCipherSuite>>,
 }
 
@@ -24,7 +28,7 @@ pub struct RequestUpdate {
 #[derive(Serialize, Deserialize)]
 pub enum State {
 	LoginResponse(Box<CredentialResponse<SpacedriveCipherSuite>>),
-	End,
+	End(ServerSecretKey),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -38,6 +42,7 @@ impl fmt::Debug for Request {
 			.field("access_token", &self.access_token)
 			.field("pub_id", &self.pub_id)
 			.field("connection_id", &"REDACTED")
+			.field("public_key", &self.public_key)
 			.field("opaque_login_message", &"<RegistrationRequestData>")
 			.finish()
 	}
@@ -57,7 +62,7 @@ impl fmt::Debug for State {
 			Self::LoginResponse(_) => {
 				write!(f, "State::LoginResponse(<CredentialResponseData>)")
 			}
-			Self::End => write!(f, "State::End"),
+			Self::End(_) => write!(f, "State::End"),
 		}
 	}
 }

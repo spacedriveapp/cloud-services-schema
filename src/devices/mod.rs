@@ -1,3 +1,5 @@
+use crate::auth::DevicePublicKey;
+
 use chrono::{DateTime, Utc};
 use iroh_base::ticket::NodeTicket;
 use serde::{Deserialize, Serialize};
@@ -27,7 +29,12 @@ pub struct Device {
 	pub pub_id: PubId,
 	pub name: String,
 	pub os: DeviceOS,
-	pub storage_size: u64,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	#[serde(default)]
+	pub storage_size: Option<u64>,
+	#[serde(skip_serializing_if = "Option::is_none")]
+	#[serde(default)]
+	pub public_key: Option<DevicePublicKey>,
 	pub connection_id: NodeTicket,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,
