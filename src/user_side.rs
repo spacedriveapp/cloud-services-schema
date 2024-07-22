@@ -1,42 +1,13 @@
-use quic_rpc::declare_rpc;
 use serde::{Deserialize, Serialize};
 
-use crate::{declare_client, declare_client_rpc_calls, declare_requests, declare_responses};
-
-/// RPC service declaration for [`user_side::Service`]
-#[derive(Clone, Debug)]
-pub struct Service;
-
-impl quic_rpc::Service for Service {
-	type Req = Request;
-	type Res = Response;
-}
-
-declare_rpc!(Service, authorize_new_instance::Request, Result<authorize_new_instance::Response, UserSideError>);
-
-declare_client!(Service);
-
-declare_client_rpc_calls!(
-	Client<C, S>,
-	UserSideError,
-	rpc = [authorize_new_instance],
-	client_stream = [],
-	server_stream = [],
-	bidirectional_stream = []
-);
+crate::declare!(rpc = [authorize_new_device], custom_error = UserSideError);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum UserSideError {
 	RequestRejected,
-	FailedToDecryptPGPPrivateKey,
-	FailedToDecryptSyncAESKey,
-	FailedToEncryptSyncAESKey,
 }
 
-declare_requests!(rpc = [authorize_new_instance]);
-declare_responses!(UserSideError, authorize_new_instance);
-
-pub mod authorize_new_instance {
+pub mod authorize_new_device {
 	use serde::{Deserialize, Serialize};
 	use uuid::Uuid;
 

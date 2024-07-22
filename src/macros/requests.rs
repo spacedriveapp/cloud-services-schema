@@ -1,25 +1,13 @@
+#[doc(hidden)]
 #[macro_export]
-macro_rules! declare_requests {
+macro_rules! __declare_requests {
 	(
-		$(parent -> $parent:ty,)?
-		$(rpc = [$($rpc_module:tt),* $(,)?] $(,)?)?
-		$(client_stream = [$($client_stream_module:tt),* $(,)?] $(,)?)?
-		$(server_stream = [$($server_stream_module:tt),* $(,)?] $(,)?)?
-		$(bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?)?
-	) => {
-		declare_requests!(
-			@end,
-			$(parent -> $parent,)?
-			rpc = [$($($rpc_module,)*)? $($($server_stream_module,)*)?],
-			client_stream = [$($($client_stream_module,)*)? $($($bidirectional_stream_module,)*)?],
-		);
-	};
-
-	(
-		@end,
-		$(parent -> $parent:ty,)?
-		rpc = [$($module:tt),* $(,)?] $(,)?
-		client_stream = [$($s_module:tt),* $(,)?] $(,)?
+		parent -> ($($parent:ty)?),
+		children = [$($children_module:tt),* $(,)?],
+		rpc = [$($rpc_module:tt),* $(,)?],
+		client_stream = [$($client_stream_module:tt),* $(,)?],
+		server_stream = [$($server_stream_module:tt),* $(,)?],
+		bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?
 	) => {
 		paste::paste!{
 			#[derive(
@@ -28,34 +16,35 @@ macro_rules! declare_requests {
 				::serde::Deserialize
 			)]
 			pub enum Request {
-				$( [<$module:camel>]($module::Request),)*
+				$( [<$children_module:camel>]($children_module::Request),)*
+				$( [<$rpc_module:camel>]($rpc_module::Request),)*
 				$(
-					[<$s_module:camel>]($s_module::Request),
-					[<$s_module:camel Update>]($s_module::RequestUpdate),
+					[<$client_stream_module:camel>]($client_stream_module::Request),
+					[<$client_stream_module:camel Update>]($client_stream_module::RequestUpdate),
+				)*
+				$( [<$server_stream_module:camel>]($server_stream_module::Request),)*
+				$(
+					[<$bidirectional_stream_module:camel>]($bidirectional_stream_module::Request),
+					[<$bidirectional_stream_module:camel Update>]($bidirectional_stream_module::RequestUpdate),
 				)*
 			}
 
-			$($crate::__requests_conversion!($module);)*
+			$($crate::__requests_conversion!($children_module);)*
+			$($crate::__requests_conversion!($rpc_module);)*
+			$($crate::__requests_conversion!($client_stream_module, client_stream);)*
+			$($crate::__requests_conversion!($server_stream_module);)*
+			$($crate::__requests_conversion!($bidirectional_stream_module, client_stream);)*
 
-			$($crate::__requests_conversion!($s_module, client_stream);)*
-
-
-			$crate::__requests_conversion_with_parent!($(parent -> $parent,)? $($module),*);
-			$crate::__requests_conversion_with_parent!(client_stream, $($parent)?, $($s_module),*);
-
+			$crate::__internal_requests_conversion_with_parent!(
+				$(parent -> $parent,)?
+				$($children_module,)* $($rpc_module,)* $($server_stream_module,)*
+			);
+			$crate::__internal_requests_conversion_with_parent!(
+				client_stream,
+				$($parent)?,
+				$($client_stream_module,)*  $($bidirectional_stream_module,)*
+			);
 		}
-	};
-
-	(rpc = [$($module:tt),* $(,)?] $(,)?) => {
-		declare_requests!(rpc = [$($module),*], client_stream = []);
-	};
-
-	(parent -> $parent:ty, rpc = [$($module:tt),* $(,)?] $(,)?) => {
-		declare_requests!(
-			parent -> $parent,
-			rpc = [$($module),*],
-			client_stream = []
-		);
 	};
 }
 
@@ -161,14 +150,15 @@ macro_rules! __requests_conversion {
 
 #[doc(hidden)]
 #[macro_export]
-macro_rules! __requests_conversion_with_parent {
-	(parent ->$parent:ty, $($module:tt),*) => {
+macro_rules! __internal_requests_conversion_with_parent {
+	(parent -> $parent:ty, $($module:tt),* $(,)?) => {
 		$($crate::__requests_conversion!($module, $parent);)*
 	};
 
-	($($module:tt),*) => {};
+	// No Parent we're good
+	($($module:tt),* $(,)?) => {};
 
-	(client_stream, $parent:ty, $($module:tt),*) => {
+	(client_stream, $parent:ty, $($module:tt),* $(,)?) => {
 		$($crate::__requests_conversion!($module, $parent, client_stream);)*
 	};
 }

@@ -1,38 +1,17 @@
-use quic_rpc::declare_rpc;
-
-use super::{declare_inner_client_rpc_calls, declare_requests, declare_responses, Error};
-
-declare_inner_client_rpc_calls!(
-	crate::Service,
+crate::declare!(
+	parent = crate,
 	rpc = [delete],
-	client_stream = [],
-	server_stream = [],
 	bidirectional_stream = [register]
 );
 
-impl<'c, C, S> Client<'c, C, S>
-where
-	C: ::quic_rpc::ServiceConnection<S>,
-	S: ::quic_rpc::Service,
-{
-}
-
-declare_requests!(parent -> crate::Request, rpc = [delete], bidirectional_stream = [register]);
-declare_responses!(parent -> crate::Response, register, delete);
-
-// declare_rpc!(crate::Service, create::Request, Result<create::Response, Error>);
-declare_rpc!(crate::Service, delete::Request, Result<delete::Response, Error>);
-
 pub mod register {
+	use crate::{auth::AccessToken, SpacedriveCipherSuite};
+
 	use std::fmt;
 
 	use opaque_ke::{RegistrationRequest, RegistrationResponse, RegistrationUpload};
-	use quic_rpc::message::{BidiStreaming, BidiStreamingMsg, Msg};
 	use serde::{Deserialize, Serialize};
 	use uuid::Uuid;
-
-	use crate::auth::AccessToken;
-	use crate::SpacedriveCipherSuite;
 
 	#[derive(Debug, Serialize, Deserialize)]
 	pub enum DeviceOS {
@@ -100,20 +79,12 @@ pub mod register {
 	pub struct Response {
 		pub state: State,
 	}
-
-	impl Msg<crate::Service> for Request {
-		type Pattern = BidiStreaming;
-	}
-	impl BidiStreamingMsg<crate::Service> for Request {
-		type Update = RequestUpdate;
-		type Response = Result<Response, crate::Error>;
-	}
 }
 
 pub mod delete {
-	use serde::{Deserialize, Serialize};
-
 	use crate::auth::AccessToken;
+
+	use serde::{Deserialize, Serialize};
 
 	#[derive(Debug, Serialize, Deserialize)]
 	pub struct Request {
@@ -121,5 +92,5 @@ pub mod delete {
 	}
 
 	#[derive(Debug, Serialize, Deserialize)]
-	pub struct Response {}
+	pub struct Response;
 }

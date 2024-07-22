@@ -1,15 +1,17 @@
+#![allow(clippy::unused_async, clippy::unwrap_used)]
+
 use std::sync::Arc;
 
 use quic_rpc::{
+	RpcClient,
+	RpcServer,
 	server::{RpcChannel, RpcServerError},
-	transport::flume,
-	transport::ConnectionErrors,
-	RpcClient, RpcServer, ServiceEndpoint,
+	ServiceEndpoint, transport::ConnectionErrors, transport::flume,
 };
-use tokio::spawn;
+use tokio::{spawn, task::JoinHandle};
 use uuid::Uuid;
 
-use sd_cloud_schema::{auth::AccessToken, sync, Client, Error, Request, Service};
+use sd_cloud_schema::{auth::AccessToken, Client, Error, Request, Service, sync};
 
 #[derive(Default)]
 pub struct App {
@@ -122,7 +124,10 @@ impl App {
 	}
 }
 
-pub fn dispatch_server<C: ServiceEndpoint<Service>>(server_conn: C, handler: App) {
+pub fn dispatch_server<C: ServiceEndpoint<Service>>(
+	server_conn: C,
+	handler: App,
+) -> JoinHandle<()> {
 	let server = RpcServer::new(server_conn);
 	let handler = Arc::new(handler);
 
@@ -134,6 +139,7 @@ pub fn dispatch_server<C: ServiceEndpoint<Service>>(server_conn: C, handler: App
 			match accepting.read_first().await {
 				Err(e) => eprintln!("server accept failed: {e:#?}"),
 				Ok((req, chan)) => {
+					println!("Got request: {req:?}");
 					let handler = Arc::clone(&handler);
 					spawn(async move {
 						if let Err(err) = handler.handle_rpc_request(req, chan).await {
@@ -143,7 +149,7 @@ pub fn dispatch_server<C: ServiceEndpoint<Service>>(server_conn: C, handler: App
 				}
 			}
 		}
-	});
+	})
 }
 
 #[tokio::main]
@@ -152,22 +158,27 @@ async fn main() {
 
 	let (server_conn, client_conn) = flume::connection::<Service>(1);
 
-	dispatch_server(server_conn, server);
+	let server_handle = dispatch_server(server_conn, server);
 
 	let client = Client::new(RpcClient::new(client_conn));
 
-	assert!(matches!(
-		client
-			.sync()
-			.groups()
-			.create(sync::groups::create::Request {
-				access_token: AccessToken("unauthorized".to_string()),
-				sd_instance_id: Default::default(),
-				pgp_public_key: vec![],
-				encrypted_sync_aes_key: vec![],
-			})
-			.await
-			.unwrap(),
-		Err(Error::Unauthorized)
-	));
+	let response = client
+		.sync()
+		.groups()
+		.create(sync::groups::create::Request {
+			access_token: AccessToken("unauthorized".to_string()),
+			sd_instance_id: Uuid::default(),
+			pgp_public_key: vec![],
+			encrypted_sync_aes_key: vec![],
+		})
+		.await
+		.unwrap();
+
+	println!("Received response: {response:?}");
+
+	assert!(matches!(response, Err(Error::Unauthorized)));
+
+	server_handle.abort();
+
+	assert!(server_handle.await.is_err_and(|e| e.is_cancelled()));
 }

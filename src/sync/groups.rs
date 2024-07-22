@@ -1,29 +1,10 @@
-use quic_rpc::declare_rpc;
-
-use crate::{declare_inner_client_rpc_calls, declare_requests, declare_responses, sync, Error};
-
-declare_inner_client_rpc_calls!(
-	sync::Service,
-	rpc = [create, list, join, leave, delete],
-	client_stream = [],
-	server_stream = [],
-	bidirectional_stream = []
-);
-
-declare_requests!(parent -> sync::Request, rpc = [create, list, join, leave, delete]);
-declare_responses!(parent -> sync::Response, create, list, join, leave, delete);
-
-declare_rpc!(sync::Service, create::Request, Result<create::Response, Error>);
-declare_rpc!(sync::Service, list::Request, Result<list::Response, Error>);
-declare_rpc!(sync::Service, join::Request, Result<join::Response, Error>);
-declare_rpc!(sync::Service, leave::Request, Result<leave::Response, Error>);
-declare_rpc!(sync::Service, delete::Request, Result<delete::Response, Error>);
+crate::declare!(parent = super, rpc = [create, list, join, leave, delete]);
 
 pub mod create {
+	use crate::auth::AccessToken;
+
 	use serde::{Deserialize, Serialize};
 	use uuid::Uuid;
-
-	use crate::auth::AccessToken;
 
 	#[derive(Debug, Serialize, Deserialize)]
 	pub struct Request {

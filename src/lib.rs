@@ -1,32 +1,3 @@
-#![warn(
-	clippy::all,
-	clippy::pedantic,
-	clippy::correctness,
-	clippy::perf,
-	clippy::style,
-	clippy::suspicious,
-	clippy::complexity,
-	clippy::nursery,
-	clippy::unwrap_used,
-	unused_qualifications,
-	rust_2018_idioms,
-	trivial_casts,
-	trivial_numeric_casts,
-	unused_allocation,
-	clippy::unnecessary_cast,
-	clippy::cast_lossless,
-	clippy::cast_possible_truncation,
-	clippy::cast_possible_wrap,
-	clippy::cast_precision_loss,
-	clippy::cast_sign_loss,
-	clippy::dbg_macro,
-	clippy::deprecated_cfg_attr,
-	clippy::separated_literal_suffix,
-	deprecated
-)]
-#![forbid(deprecated_in_future)]
-#![allow(clippy::missing_errors_doc, clippy::module_name_repetitions)]
-
 // Re-exporting the opaque-ke crate
 pub use opaque_ke;
 
@@ -40,9 +11,12 @@ pub mod sync;
 pub mod user_side;
 pub mod users;
 
-declare_requests!(rpc = [sync, users, devices]);
-declare_responses!(children_responses = [sync, users, devices]);
+declare!(
+	nested_services = [sync],
+	children_clients = [users, devices]
+);
 
+/// The cipher suite for e2e encryption with OPAQUE used by Spacedrive Cloud Services
 pub struct SpacedriveCipherSuite;
 
 impl opaque_ke::CipherSuite for SpacedriveCipherSuite {
@@ -51,16 +25,3 @@ impl opaque_ke::CipherSuite for SpacedriveCipherSuite {
 	type KeyExchange = opaque_ke::key_exchange::tripledh::TripleDh;
 	type Ksf = argon2::Argon2<'static>;
 }
-
-#[derive(Copy, Clone, Debug)]
-pub struct Service;
-impl quic_rpc::Service for Service {
-	type Req = Request;
-	type Res = Response;
-}
-
-declare_client!(
-	Service,
-	nested_service_clients = [sync],
-	child_clients = [users, devices]
-);

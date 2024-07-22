@@ -1,69 +1,28 @@
+#[doc(hidden)]
 #[macro_export]
-macro_rules! declare_responses {
+macro_rules! __declare_responses {
 	(
-		children_responses = [$($children_module:tt),* $(,)?],
+		$error:ty,
+		parent -> ($($parent:ty)?),
+		children = [$($children_module:tt),* $(,)?],
 		$($module:tt),* $(,)?
 	) => {
 		paste::paste!{
 			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
 			pub enum Response {
-				$( [<$module:camel>](Result<$module::Response, $crate::Error>),)*
+				$( [<$module:camel>](Result<$module::Response, $error>),)*
 				$( [<$children_module:camel>]($children_module::Response),)*
 			}
 
-			$(
-				$crate::__responses_conversion!($module, $crate::Error);
-			)*
+			$crate::__responses_conversion!(
+				$error,
+				$(parent -> $parent,)?
+				$($module,)*
+			);
 
 			$(
 				$crate::__responses_conversion!(children -> $children_module);
 			)*
-		}
-	};
-
-	(
-		children_responses = [$($children_module:tt),* $(,)?]
-	) => {
-		paste::paste!{
-			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
-			pub enum Response {
-				$( [<$children_module:camel>]($children_module::Response),)*
-			}
-
-			$(
-				$crate::__responses_conversion!(children -> $children_module);
-			)*
-		}
-	};
-
-	(
-		$error:ty,
-		$($module:tt),+ $(,)?
-	) => {
-		paste::paste!{
-			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
-			pub enum Response {
-				$( [<$module:camel>](Result<$module::Response, $error>),)+
-			}
-
-			$(
-				$crate::__responses_conversion!($module, $error);
-			)*
-		}
-	};
-
-
-	(parent -> $parent:ty, $($module:tt),+ $(,)?) => {
-		paste::paste!{
-			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
-			pub enum Response {
-				$( [<$module:camel>](Result<$module::Response, $crate::Error>),)*
-			}
-
-			$(
-				$crate::__responses_conversion!($module, $crate::Error);
-				$crate::__responses_conversion!($module, $crate::Error, $parent);
-			)+
 		}
 	};
 }
@@ -71,7 +30,13 @@ macro_rules! declare_responses {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __responses_conversion {
-	($module:tt, $error:ty) => {
+	($error:ty, $($module:tt),* $(,)?) => {
+		$(
+			$crate::__responses_conversion!(@end, $error, $module);
+		)*
+	};
+
+	(@end, $error:ty, $module:tt $(,)?) => {
 		paste::paste! {
 			impl From<Result<$module::Response, $error>> for Response {
 				fn from(res: Result<$module::Response, $error>) -> Self {
@@ -93,15 +58,23 @@ macro_rules! __responses_conversion {
 		}
 	};
 
-	($module:tt, $error:ty, $parent:ty) => {
+	($error:ty, parent -> $parent:ty, $($module:tt),* $(,)?) => {
+		$(
+			$crate::__responses_conversion!(@end, $error, parent -> $parent, $module);
+		)*
+	};
+
+	(@end, $error:ty, parent -> $parent:ty, $module:tt $(,)?) => {
 		paste::paste! {
-			impl From<Result<$module::Response, $crate::Error>> for $parent {
-				fn from(res: Result<$module::Response, $crate::Error>) -> Self {
+			$crate::__responses_conversion!(@end, $error, $module);
+
+			impl From<Result<$module::Response, $error>> for $parent {
+				fn from(res: Result<$module::Response, $error>) -> Self {
 					Response::from(res).into()
 				}
 			}
 
-			impl TryFrom<$parent> for Result<$module::Response, $crate::Error> {
+			impl TryFrom<$parent> for Result<$module::Response, $error> {
 				type Error = $parent;
 
 				#[allow(unreachable_patterns)]
