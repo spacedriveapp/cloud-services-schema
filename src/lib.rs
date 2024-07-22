@@ -1,19 +1,40 @@
 // Re-exporting the opaque-ke crate
 pub use opaque_ke;
 
+/// Exporting the error type
 pub use error::Error;
 
-pub mod auth;
+/* API modules */
+
+/// Requests and responses for dealing with device's data
 pub mod devices;
+
+/// Requests and responses for dealing with user's libraries
+pub mod libraries;
+
+/// Requests and responses for dealing with user's locations
+pub mod locations;
+
+/// Sync service and it's related requests and responses
+pub mod sync;
+
+/// Service running as a server in the user's side
+pub mod user_server;
+
+/// Requests and responses for dealing with user's data
+pub mod users;
+
+/* API modules END */
+
+/// Auth helper module with a new type for access tokens
+pub mod auth;
+
 mod error;
 mod macros;
-pub mod sync;
-pub mod user_side;
-pub mod users;
 
 declare!(
 	nested_services = [sync],
-	children_clients = [users, devices]
+	children_clients = [devices, libraries, locations, users],
 );
 
 /// The cipher suite for e2e encryption with OPAQUE used by Spacedrive Cloud Services

@@ -3,15 +3,15 @@
 use std::sync::Arc;
 
 use quic_rpc::{
-	RpcClient,
-	RpcServer,
 	server::{RpcChannel, RpcServerError},
-	ServiceEndpoint, transport::ConnectionErrors, transport::flume,
+	transport::flume,
+	transport::ConnectionErrors,
+	RpcClient, RpcServer, ServiceEndpoint,
 };
 use tokio::{spawn, task::JoinHandle};
 use uuid::Uuid;
 
-use sd_cloud_schema::{auth::AccessToken, Client, Error, Request, Service, sync};
+use sd_cloud_schema::{auth::AccessToken, sync, Client, Error, Request, Service};
 
 #[derive(Default)]
 pub struct App {
