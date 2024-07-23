@@ -1,5 +1,5 @@
 // Re-exporting the opaque-ke crate
-pub use iroh_base::ticket::NodeTicket;
+pub use iroh_base::ticket::{NodeTicket, Ticket};
 pub use opaque_ke;
 pub use ed25519_dalek::{VerifyingKey, Verifier};
 
