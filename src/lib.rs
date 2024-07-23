@@ -1,4 +1,5 @@
 // Re-exporting the opaque-ke crate
+pub use iroh_base::ticket::NodeTicket;
 pub use opaque_ke;
 
 /// Exporting the error type
