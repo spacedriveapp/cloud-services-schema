@@ -47,6 +47,7 @@ module_name_repetitions = "allow"
 [dependencies]
 argon2 = "0.5.3"
 chrono = { version = "0.4.38", default-features = false, features = ["serde"] }
+ed25519-dalek = { version = "2.1.1", features = ["serde"] }
 futures-lite = { version = "2.3.0", default-features = false, features = ["alloc"] }
 iroh-base = { version = "0.20.0", features = ["key"] }
 opaque-ke = { version = "3.0.0-pre.4", features = ["argon2"] }

@@ -1,5 +1,6 @@
 use std::fmt;
 
+use ed25519_dalek::VerifyingKey;
 use serde::{Deserialize, Serialize};
 use zeroize::ZeroizeOnDrop;
 
@@ -17,7 +18,7 @@ pub struct ServerSignedToken(pub String);
 
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]
-pub struct DevicePublicKey(pub Vec<u8>);
+pub struct DevicePublicKey(pub VerifyingKey);
 
 #[derive(Serialize, Deserialize, ZeroizeOnDrop)]
 #[serde(transparent)]
