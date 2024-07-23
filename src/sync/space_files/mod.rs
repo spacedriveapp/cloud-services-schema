@@ -13,14 +13,14 @@ crate::declare!(
 );
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct PubId(pub Uuid);
+pub struct ObjectPubId(pub Uuid);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FilePathPubId(pub Uuid);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SpaceFile {
-	pub pub_id: PubId,
+	pub object_pub_id: ObjectPubId,
 	pub file_path_pub_id: FilePathPubId,
 	pub key_hash: KeyHash,
 	pub name: String,
