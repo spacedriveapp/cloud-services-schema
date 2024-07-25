@@ -30,7 +30,8 @@ pub mod users;
 /// Auth helper module with a new type for access tokens
 pub mod auth;
 
-mod error;
+/// Exporting errors module
+pub mod error;
 mod macros;
 
 declare!(
