@@ -10,15 +10,17 @@ crate::declare!(
 	parent = super,
 	rpc = [
 		create,
-		list,
-		request_join,
-		reply_join_request,
+		delete,
+		get,
 		leave,
-		delete
+		list,
+		remove_device,
+		reply_join_request,
+		request_join,
 	]
 );
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 

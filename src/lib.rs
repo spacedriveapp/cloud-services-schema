@@ -1,7 +1,6 @@
-// Re-exporting the opaque-ke crate
-pub use iroh_base::ticket::{NodeTicket, Ticket};
+// Re-exporting the opaque-ke crate and veriying facilities for signed messages
+pub use ed25519_dalek::{Verifier, VerifyingKey};
 pub use opaque_ke;
-pub use ed25519_dalek::{VerifyingKey, Verifier};
 
 /// Exporting the error type
 pub use error::Error;

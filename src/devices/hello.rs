@@ -32,9 +32,7 @@ pub enum State {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Response {
-	pub state: State,
-}
+pub struct Response(pub State);
 
 impl fmt::Debug for Request {
 	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

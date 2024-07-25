@@ -13,6 +13,4 @@ pub struct Request {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Response {
-	pub group_id: PubId,
-}
+pub struct Response(pub PubId);

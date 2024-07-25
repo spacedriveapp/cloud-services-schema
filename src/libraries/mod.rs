@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 crate::declare!(parent = crate, rpc = [create, get, list, update, delete]);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 

@@ -11,7 +11,7 @@ crate::declare!(
 	bidirectional_stream = [register, hello]
 );
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 
