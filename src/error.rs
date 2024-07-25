@@ -23,8 +23,8 @@ pub enum ClientSideError {
 	NotFound(#[from] NotFoundError),
 	#[error(transparent)]
 	Conflict(#[from] ConflictError),
-	#[error("User quota exceeded")]
-	UserQuotaExceeded,
+	#[error(transparent)]
+	UserQuotaExceeded(#[from] UserQuotaExceededError),
 }
 
 #[derive(thiserror::Error, Debug, Serialize, Deserialize)]
