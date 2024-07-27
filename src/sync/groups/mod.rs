@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use super::KeyHash;
 
-crate::declare!(
+crate::declare! {
 	parent = super,
 	rpc = [
 		create,
@@ -17,7 +17,18 @@ crate::declare!(
 		remove_device,
 		reply_join_request,
 		request_join,
-	]
+	],
+}
+
+crate::need_auth!(
+	create,
+	delete,
+	get,
+	leave,
+	list,
+	remove_device,
+	reply_join_request,
+	request_join,
 );
 
 #[derive(Debug, Serialize, Deserialize, derive_more::Display)]

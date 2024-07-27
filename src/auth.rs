@@ -4,6 +4,11 @@ use ed25519_dalek::VerifyingKey;
 use serde::{Deserialize, Serialize};
 use zeroize::ZeroizeOnDrop;
 
+/// Trait to abstract over the need of authentication for a request
+pub trait NeedAuth {
+	fn access_token(&self) -> &AccessToken;
+}
+
 #[derive(Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct AccessToken(pub String);

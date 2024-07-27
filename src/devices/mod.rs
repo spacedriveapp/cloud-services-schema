@@ -5,11 +5,13 @@ use iroh_base::ticket::NodeTicket;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-crate::declare!(
+crate::declare! {
 	parent = crate,
 	rpc = [get, list, update, delete],
-	bidirectional_stream = [register, hello]
-);
+	bidirectional_stream = [register, hello],
+}
+
+crate::need_auth!(get, list, update, delete, register, hello);
 
 #[derive(Debug, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]

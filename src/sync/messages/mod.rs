@@ -4,12 +4,14 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-crate::declare!(
+crate::declare! {
 	parent = super,
 	rpc = [delete_older],
 	client_stream = [push],
-	server_stream = [pull]
-);
+	server_stream = [pull],
+}
+
+crate::need_auth!(delete_older, pull, push);
 
 use super::KeyHash;
 

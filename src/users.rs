@@ -1,4 +1,9 @@
-crate::declare!(parent = super, rpc = [create, delete]);
+crate::declare! {
+	parent = super,
+	rpc = [create, delete]
+}
+
+crate::need_auth!(create, delete);
 
 pub mod create {
 	use crate::auth::AccessToken;

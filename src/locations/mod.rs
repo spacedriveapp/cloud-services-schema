@@ -4,7 +4,12 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-crate::declare!(parent = crate, rpc = [create, get, list, update, delete]);
+crate::declare! {
+	parent = crate,
+	rpc = [create, get, list, update, delete],
+}
+
+crate::need_auth!(create, get, list, update, delete);
 
 #[derive(Debug, Serialize, Deserialize, derive_more::Display)]
 pub struct PubId(pub Uuid);

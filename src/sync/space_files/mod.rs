@@ -5,12 +5,14 @@ use uuid::Uuid;
 
 use super::KeyHash;
 
-crate::declare!(
+crate::declare! {
 	parent = super,
 	rpc = [delete, pull, update_metadata],
 	client_stream = [push, update],
 	server_stream = [list],
-);
+}
+
+crate::need_auth!(delete, list, pull, push, update, update_metadata);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ObjectPubId(pub Uuid);

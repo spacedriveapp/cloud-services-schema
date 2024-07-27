@@ -208,3 +208,17 @@ macro_rules! __declare_impl {
 		);
 	};
 }
+
+/// Helper macro to implement the [`NeedAuth`] trait for all the requests that need authentication
+#[macro_export]
+macro_rules! need_auth {
+	($($need_auth_mods:tt),+ $(,)?) => {
+		$(
+			impl $crate::auth::NeedAuth for $need_auth_mods::Request {
+				fn access_token(&self) -> &$crate::auth::AccessToken {
+					&self.access_token
+				}
+			}
+		)+
+	};
+}

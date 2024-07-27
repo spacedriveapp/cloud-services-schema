@@ -4,10 +4,12 @@ pub mod groups;
 pub mod messages;
 pub mod space_files;
 
-crate::declare!(
+crate::declare! {
 	children_clients = [messages, groups, space_files],
 	rpc = [find_key_owners],
-);
+}
+
+crate::need_auth!(find_key_owners);
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(transparent)]
