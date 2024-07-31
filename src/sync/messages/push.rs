@@ -2,8 +2,7 @@ use crate::{auth::AccessToken, devices, sync::groups};
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-
-use super::MessagesCollectionEncryptedChunk;
+use url::Url;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
@@ -13,10 +12,25 @@ pub struct Request {
 	pub operations_count: u32,
 	pub start_time: DateTime<Utc>,
 	pub end_time: DateTime<Utc>,
+	pub expected_blob_size: u64,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct RequestUpdate(pub MessagesCollectionEncryptedChunk);
+pub enum UpdateKind {
+	Ping,
+	End,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Response;
+pub struct RequestUpdate(pub UpdateKind);
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum ResponseKind {
+	SinglePresignedUrl(Url),
+	ManyPresignedUrls(Vec<Url>),
+	Pong,
+	End,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Response(pub ResponseKind);

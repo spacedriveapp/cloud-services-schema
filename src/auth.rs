@@ -1,60 +1,37 @@
-use std::fmt;
+use std::{fmt, future::Future};
 
-use ed25519_dalek::VerifyingKey;
-use serde::{Deserialize, Serialize};
-use zeroize::ZeroizeOnDrop;
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
 /// Trait to abstract over the need of authentication for a request
 pub trait NeedAuth {
 	fn access_token(&self) -> &AccessToken;
 }
 
-#[derive(Serialize, Deserialize)]
+/// Newtype wrapper for the access token
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(transparent)]
 pub struct AccessToken(pub String);
 
-#[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct P2PSignedToken(pub String);
-
-#[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct ServerSignedToken(pub String);
-
-#[derive(Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct DevicePublicKey(pub VerifyingKey);
-
-#[derive(Serialize, Deserialize, ZeroizeOnDrop)]
-#[serde(transparent)]
-pub struct ServerSecretKey(pub Vec<u8>);
-
-impl fmt::Debug for AccessToken {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "AccessToken(<REDACTED>)")
-	}
+/// Enum to wrap the possible errors that can happen during authentication, used by
+/// the auth middleware
+pub enum AuthError<Unauthorized, Internal>
+where
+	Unauthorized: std::error::Error + Send + Sync + fmt::Debug + 'static,
+	Internal: std::error::Error + Send + Sync + fmt::Debug + 'static,
+{
+	Unauthorized(Unauthorized),
+	Internal(Internal),
 }
 
-impl fmt::Debug for P2PSignedToken {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "P2PSignedToken(<REDACTED>)")
-	}
-}
-
-impl fmt::Debug for ServerSignedToken {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "ServerSignedToken(<REDACTED>)")
-	}
-}
-
-impl fmt::Debug for DevicePublicKey {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "DevicePublicKey(<REDACTED>)")
-	}
-}
-
-impl fmt::Debug for ServerSecretKey {
-	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-		write!(f, "ServerSecretKey(<REDACTED>)")
-	}
+/// Apps that need authentication should implement this trait to be able to use the auth middleware
+pub trait AuthableApp<Unauthorized, Internal>: Send
+where
+	Unauthorized: std::error::Error + Send + Sync + fmt::Debug + 'static,
+	Internal: std::error::Error + Send + Sync + fmt::Debug + 'static,
+{
+	type Claims: DeserializeOwned + Send;
+	fn decode(
+		&self,
+		token: &AccessToken,
+	) -> impl Future<Output = Result<Self::Claims, AuthError<Unauthorized, Internal>>> + Send;
 }

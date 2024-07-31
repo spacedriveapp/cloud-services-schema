@@ -1,6 +1,6 @@
 use crate::auth::AccessToken;
+use iroh_base::key::NodeId;
 
-use iroh_base::ticket::NodeTicket;
 use serde::{Deserialize, Serialize};
 
 use super::PubId;
@@ -11,7 +11,7 @@ pub struct Request {
 	pub pub_id: PubId,
 	pub name: String,
 	pub storage_size: u64,
-	pub connection_id: NodeTicket,
+	pub connection_id: NodeId,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

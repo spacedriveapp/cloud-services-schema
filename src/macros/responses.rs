@@ -10,7 +10,7 @@ macro_rules! __declare_responses {
 		paste::paste!{
 			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
 			pub enum Response {
-				$( [<$module:camel>](Result<$module::Response, $error>),)*
+				$( [<$module:camel>](Box<Result<$module::Response, $error>>),)*
 				$( [<$children_module:camel>]($children_module::Response),)*
 			}
 
@@ -40,7 +40,7 @@ macro_rules! __responses_conversion {
 		paste::paste! {
 			impl From<Result<$module::Response, $error>> for Response {
 				fn from(res: Result<$module::Response, $error>) -> Self {
-					Self::[<$module:camel>](res)
+					Self::[<$module:camel>](Box::new(res))
 				}
 			}
 
@@ -50,7 +50,7 @@ macro_rules! __responses_conversion {
 				#[allow(unreachable_patterns)]
 				fn try_from(res: Response) -> Result<Self, Self::Error> {
 					match res {
-						Response::[<$module:camel>](res) => Ok(res),
+						Response::[<$module:camel>](res) => Ok(*res),
 						_ => Err(res),
 					}
 				}
@@ -80,7 +80,7 @@ macro_rules! __responses_conversion {
 				#[allow(unreachable_patterns)]
 				fn try_from(res: $parent) -> Result<Self, Self::Error> {
 					match Response::try_from(res) {
-						Ok(Response::[<$module:camel>](res)) => Ok(res),
+						Ok(Response::[<$module:camel>](res)) => Ok(*res),
 						Ok(x) => Err($parent::from(x)),
 						Err(res) => Err(res),
 					}

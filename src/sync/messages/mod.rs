@@ -7,8 +7,8 @@ use url::Url;
 crate::declare! {
 	parent = super,
 	rpc = [delete_older],
-	client_stream = [push],
 	server_stream = [pull],
+	bidirectional_stream = [push],
 }
 
 crate::need_auth!(delete_older, pull, push);
@@ -24,10 +24,6 @@ pub struct MessagesCollection {
 	key_hash: KeyHash,
 	signed_download_link: Url,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct MessagesCollectionEncryptedChunk(pub Vec<u8>);
 
 pub mod delete_older;
 pub mod pull;

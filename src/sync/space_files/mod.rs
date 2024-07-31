@@ -8,8 +8,8 @@ use super::KeyHash;
 crate::declare! {
 	parent = super,
 	rpc = [delete, pull, update_metadata],
-	client_stream = [push, update],
 	server_stream = [list],
+	bidirectional_stream = [push, update],
 }
 
 crate::need_auth!(delete, list, pull, push, update, update_metadata);
@@ -31,12 +31,8 @@ pub struct SpaceFile {
 	pub uploaded_at: DateTime<Utc>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	#[serde(default)]
-	pub signed_download_link: Option<Url>,
+	pub presigned_download_link: Option<Url>,
 }
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct SpaceFileEncryptedChunk(pub Vec<u8>);
 
 pub mod delete;
 pub mod list;

@@ -1,8 +1,9 @@
 use crate::{auth::AccessToken, devices, sync::groups};
 
 use serde::{Deserialize, Serialize};
+use url::Url;
 
-use super::{FilePathPubId, ObjectPubId, SpaceFileEncryptedChunk};
+use super::{FilePathPubId, ObjectPubId};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
@@ -13,10 +14,17 @@ pub struct Request {
 	pub group_pub_id: groups::PubId,
 	pub name: String,
 	pub mime_type: String,
+	pub size: u64,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct RequestUpdate(pub SpaceFileEncryptedChunk);
+pub enum UpdateKind {
+	Ping,
+	End,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct RequestUpdate(pub UpdateKind);
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Status {
@@ -25,4 +33,12 @@ pub enum Status {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Response(pub Status);
+pub enum ResponseKind {
+	SinglePresignedUrl(Url),
+	ManyPresignedUrls(Vec<Url>),
+	Pong,
+	End(Status),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Response(pub ResponseKind);

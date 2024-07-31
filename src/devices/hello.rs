@@ -1,11 +1,8 @@
-use crate::{
-	auth::{AccessToken, DevicePublicKey, ServerSecretKey},
-	SpacedriveCipherSuite,
-};
+use crate::{auth::AccessToken, SpacedriveCipherSuite};
 
 use std::fmt;
 
-use iroh_base::ticket::NodeTicket;
+use iroh_base::key::NodeId;
 use opaque_ke::{CredentialFinalization, CredentialRequest, CredentialResponse};
 use serde::{Deserialize, Serialize};
 
@@ -15,8 +12,6 @@ use super::PubId;
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
-	pub connection_id: NodeTicket,
-	pub public_key: DevicePublicKey,
 	pub opaque_login_message: Box<CredentialRequest<SpacedriveCipherSuite>>,
 }
 
@@ -28,7 +23,8 @@ pub struct RequestUpdate {
 #[derive(Serialize, Deserialize)]
 pub enum State {
 	LoginResponse(Box<CredentialResponse<SpacedriveCipherSuite>>),
-	End(ServerSecretKey),
+	/// Server's [`NodeId`]
+	End(NodeId),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -39,8 +35,6 @@ impl fmt::Debug for Request {
 		f.debug_struct("Request")
 			.field("access_token", &self.access_token)
 			.field("pub_id", &self.pub_id)
-			.field("connection_id", &"REDACTED")
-			.field("public_key", &self.public_key)
 			.field("opaque_login_message", &"<RegistrationRequestData>")
 			.finish()
 	}

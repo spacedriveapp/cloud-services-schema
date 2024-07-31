@@ -1,8 +1,6 @@
-use crate::{
-	auth::{AccessToken, DevicePublicKey},
-	devices,
-};
+use crate::{auth::AccessToken, devices};
 
+use iroh_base::key::NodeId;
 use serde::{Deserialize, Serialize};
 
 use super::PubId;
@@ -15,4 +13,4 @@ pub struct Request {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Response(pub Vec<(devices::PubId, DevicePublicKey)>);
+pub struct Response(pub Vec<(devices::PubId, NodeId)>);

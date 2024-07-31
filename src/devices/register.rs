@@ -1,11 +1,8 @@
-use crate::{
-	auth::{AccessToken, DevicePublicKey, ServerSecretKey},
-	SpacedriveCipherSuite,
-};
+use crate::{auth::AccessToken, SpacedriveCipherSuite};
 
 use std::fmt;
 
-use iroh_base::ticket::NodeTicket;
+use iroh_base::key::NodeId;
 use opaque_ke::{RegistrationRequest, RegistrationResponse, RegistrationUpload};
 use serde::{Deserialize, Serialize};
 
@@ -18,8 +15,7 @@ pub struct Request {
 	pub name: String,
 	pub os: DeviceOS,
 	pub storage_size: u64,
-	pub public_key: DevicePublicKey,
-	pub connection_id: NodeTicket,
+	pub connection_id: NodeId,
 	pub opaque_register_message: Box<RegistrationRequest<SpacedriveCipherSuite>>,
 }
 
@@ -31,7 +27,8 @@ pub struct RequestUpdate {
 #[derive(Serialize, Deserialize)]
 pub enum State {
 	RegistrationResponse(Box<RegistrationResponse<SpacedriveCipherSuite>>),
-	End(ServerSecretKey),
+	/// Server's [`NodeId`]
+	End(NodeId),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -45,8 +42,7 @@ impl fmt::Debug for Request {
 			.field("name", &self.name)
 			.field("os", &self.os)
 			.field("storage_size", &self.storage_size)
-			.field("public_key", &self.public_key)
-			.field("connection_id", &"REDACTED")
+			.field("connection_id", &self.connection_id)
 			.field("opaque_register_message", &"<RegistrationRequestData>")
 			.finish()
 	}
@@ -66,7 +62,7 @@ impl fmt::Debug for State {
 			Self::RegistrationResponse(_) => {
 				write!(f, "State::RegistrationResponse(<RegistrationResponseData>)")
 			}
-			Self::End(_) => write!(f, "State::End"),
+			Self::End(node_id) => f.debug_tuple("State::End").field(&node_id).finish(),
 		}
 	}
 }

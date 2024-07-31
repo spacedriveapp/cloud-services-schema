@@ -10,6 +10,7 @@ pub const BATCH_SIZE: usize = 100;
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,
+	pub with_download_link: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

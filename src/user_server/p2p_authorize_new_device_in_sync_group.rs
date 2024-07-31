@@ -1,10 +1,9 @@
-use crate::{auth::P2PSignedToken, devices, sync::groups};
+use crate::{devices, sync::groups};
 
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
-	pub p2p_signed_token: P2PSignedToken,
 	pub sync_group: groups::Group,
 	pub device: devices::Device,
 }
