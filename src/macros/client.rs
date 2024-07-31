@@ -29,6 +29,16 @@ macro_rules! __declare_client {
 				$child_module::Client::new(&self.client)
 			})*
 		}
+
+		impl<C, S> $crate::DeclaredClient<C, S, $service> for Client<C, S>
+		where
+			C: ::quic_rpc::ServiceConnection<S>,
+			S: ::quic_rpc::Service, 
+		{
+			fn new(client: ::quic_rpc::RpcClient<S, C, $service>) -> Self {
+				Client::new(client)
+			}
+		}
 	};
 
 	(

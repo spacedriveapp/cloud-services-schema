@@ -52,6 +52,15 @@ declare!(
 	children_clients = [devices, libraries, locations, users],
 );
 
+/// A trait abstracting away the declared root clients in this schema
+pub trait DeclaredClient<C, S, SInner>
+where
+	C: quic_rpc::ServiceConnection<S>,
+	S: quic_rpc::Service,
+{
+	fn new(client: quic_rpc::RpcClient<S, C, SInner>) -> Self;
+}
+
 /// The cipher suite for e2e encryption with OPAQUE used by Spacedrive Cloud Services
 pub struct SpacedriveCipherSuite;
 
