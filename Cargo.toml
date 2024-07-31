@@ -49,7 +49,6 @@ argon2 = "0.5.3"
 async-stream = "0.3.5"
 chrono = { version = "0.4.38", default-features = false, features = ["serde"] }
 derive_more = { version = "0.99.18", default-features = false, features = ["display"] }
-ed25519-dalek = { version = "2.1.1", features = ["serde"] }
 eyre = "0.6.12"
 futures-lite = { version = "2.3.0", default-features = false, features = ["alloc"] }
 iroh-base = { version = "0.21.0", features = ["key"] }

@@ -1,5 +1,4 @@
-// Re-exporting the opaque-ke crate and veriying facilities for signed messages
-pub use ed25519_dalek::{Verifier, VerifyingKey};
+// Re-exporting the opaque-ke crate
 pub use opaque_ke;
 
 /// Exporting the error type
