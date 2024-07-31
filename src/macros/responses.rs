@@ -7,7 +7,7 @@ macro_rules! __declare_responses {
 		children = [$($children_module:tt),* $(,)?],
 		$($module:tt),* $(,)?
 	) => {
-		paste::paste!{
+		::paste::paste!{
 			#[derive(::std::fmt::Debug, ::serde::Serialize, ::serde::Deserialize)]
 			pub enum Response {
 				$( [<$module:camel>](Box<Result<$module::Response, $error>>),)*
@@ -37,7 +37,7 @@ macro_rules! __responses_conversion {
 	};
 
 	(@end, $error:ty, $module:tt $(,)?) => {
-		paste::paste! {
+		::paste::paste! {
 			impl From<Result<$module::Response, $error>> for Response {
 				fn from(res: Result<$module::Response, $error>) -> Self {
 					Self::[<$module:camel>](Box::new(res))
@@ -65,7 +65,7 @@ macro_rules! __responses_conversion {
 	};
 
 	(@end, $error:ty, parent -> $parent:ty, $module:tt $(,)?) => {
-		paste::paste! {
+		::paste::paste! {
 			$crate::__responses_conversion!(@end, $error, $module);
 
 			impl From<Result<$module::Response, $error>> for $parent {
@@ -90,7 +90,7 @@ macro_rules! __responses_conversion {
 	};
 
 	(children -> $children_module:tt) => {
-		paste::paste! {
+		::paste::paste! {
 			impl From<$children_module::Response> for Response {
 				fn from(res: $children_module::Response) -> Self {
 					Self::[<$children_module:camel>](res)

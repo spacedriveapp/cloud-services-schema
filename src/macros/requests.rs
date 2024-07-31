@@ -9,7 +9,7 @@ macro_rules! __declare_requests {
 		server_stream = [$($server_stream_module:tt),* $(,)?],
 		bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?
 	) => {
-		paste::paste!{
+		::paste::paste!{
 			#[derive(
 				::std::fmt::Debug,
 				::serde::Serialize,
@@ -52,7 +52,7 @@ macro_rules! __declare_requests {
 #[macro_export]
 macro_rules! __requests_conversion {
 	($module:tt) => {
-		paste::paste! {
+		::paste::paste! {
 			impl From<$module::Request> for Request {
 				#[allow(unreachable_patterns)]
 				fn from(req: $module::Request) -> Self {
@@ -75,7 +75,7 @@ macro_rules! __requests_conversion {
 	};
 
 	($s_module:tt, client_stream) => {
-		paste::paste! {
+		::paste::paste! {
 			impl From<$s_module::RequestUpdate> for Request {
 				#[allow(unreachable_patterns)]
 				fn from(req: $s_module::RequestUpdate) -> Self {
@@ -100,7 +100,7 @@ macro_rules! __requests_conversion {
 	};
 
 	($module:tt, $parent:ty) => {
-		paste::paste! {
+		::paste::paste! {
 			impl From<$module::Request> for $parent {
 				fn from(req: $module::Request) -> Self {
 					Request::from(req).into()
@@ -123,7 +123,7 @@ macro_rules! __requests_conversion {
 	};
 
 	($s_module:tt, $parent:ty, client_stream) => {
-		paste::paste! {
+		::paste::paste! {
 		   impl From<$s_module::RequestUpdate> for $parent {
 			   fn from(req: $s_module::RequestUpdate) -> Self {
 				   Request::from(req).into()

@@ -10,7 +10,7 @@ macro_rules! router {
 		$(authed_routes = {$($auth_route:tt -> $auth_rpc_kind:tt),+ $(,)?} $(,)?)?
         $(routes = {$($route:tt -> $rpc_kind:tt),+ $(,)?} $(,)?)?
     ) => {
-		paste::paste! {
+		::paste::paste! {
 			#[allow(unreachable_patterns, unused)]
 			pub async fn route<S, E>(
 				app: $app,
