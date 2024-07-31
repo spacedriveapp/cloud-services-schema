@@ -52,7 +52,7 @@ macro_rules! router {
 										$crate::utils
 											::middleware
 											::auth
-											::$auth_rpc_kind::<_, _, S, E, $service, _, _, _>,
+											::$auth_rpc_kind::<_, _, S, E, $service, _, _, _, _, _>,
 									),
 									$crate::utils
 										::middleware
