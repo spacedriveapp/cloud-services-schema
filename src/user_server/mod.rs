@@ -13,7 +13,7 @@ impl UserServerALPN {
 }
 
 crate::declare!(
-	rpc = [authorize_new_device_in_sync_group, reply_sync_group_join],
+	rpc = [p2p_authorize_new_device_in_sync_group,],
 	custom_error = UserServerError
 );
 
@@ -23,6 +23,4 @@ pub enum UserServerError {
 	UnableToConnect,
 }
 
-pub mod authorize_new_device_in_sync_group;
 pub mod p2p_authorize_new_device_in_sync_group;
-pub mod reply_sync_group_join;

@@ -5,10 +5,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub sync_group: groups::Group,
-	pub device: devices::Device,
+	pub asking_device: devices::Device,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Response {
 	pub authorizor_device: devices::Device,
+	pub keys: Vec<Vec<u8>>,
 }
