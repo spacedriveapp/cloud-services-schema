@@ -11,7 +11,7 @@ crate::declare! {
 
 crate::need_auth!(create, get, list, update, delete);
 
-#[derive(Debug, Serialize, Deserialize, derive_more::Display)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 

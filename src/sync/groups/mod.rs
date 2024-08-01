@@ -31,7 +31,7 @@ crate::need_auth!(
 	request_join,
 );
 
-#[derive(Debug, Serialize, Deserialize, derive_more::Display)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 

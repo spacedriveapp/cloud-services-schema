@@ -17,7 +17,7 @@ crate::declare!(
 	custom_error = UserServerError
 );
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub enum UserServerError {
 	Rejected,
 	UnableToConnect,

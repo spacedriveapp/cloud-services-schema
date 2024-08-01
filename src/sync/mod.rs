@@ -11,7 +11,7 @@ crate::declare! {
 
 crate::need_auth!(find_key_owners);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct KeyHash(pub String);
 

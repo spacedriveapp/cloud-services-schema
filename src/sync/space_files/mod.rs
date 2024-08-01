@@ -14,10 +14,10 @@ crate::declare! {
 
 crate::need_auth!(delete, list, pull, push, update, update_metadata);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct ObjectPubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct FilePathPubId(pub Uuid);
 
 #[derive(Debug, Serialize, Deserialize)]
