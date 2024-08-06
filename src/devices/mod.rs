@@ -11,11 +11,11 @@ crate::declare! {
 
 crate::need_auth!(get, list, update, delete, register, hello);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display, specta::Type)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
 pub enum DeviceOS {
 	Linux,
 	Windows,
@@ -24,12 +24,13 @@ pub enum DeviceOS {
 	Android,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct Device {
 	pub pub_id: PubId,
 	pub name: String,
 	pub os: DeviceOS,
 	pub storage_size: u64,
+	#[specta(type = String)]
 	pub connection_id: NodeId,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,

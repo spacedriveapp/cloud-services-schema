@@ -14,13 +14,13 @@ crate::declare! {
 
 crate::need_auth!(delete, list, pull, push, update, update_metadata);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
 pub struct ObjectPubId(pub Uuid);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
 pub struct FilePathPubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct SpaceFile {
 	pub object_pub_id: ObjectPubId,
 	pub file_path_pub_id: FilePathPubId,
@@ -31,6 +31,7 @@ pub struct SpaceFile {
 	pub uploaded_at: DateTime<Utc>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	#[serde(default)]
+	#[specta(type = String)]
 	pub presigned_download_link: Option<Url>,
 }
 

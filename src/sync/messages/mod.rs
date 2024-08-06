@@ -15,13 +15,14 @@ crate::need_auth!(delete_older, pull, push);
 
 use super::KeyHash;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct MessagesCollection {
 	original_device_pub_id: Option<devices::PubId>,
 	start_time: DateTime<Utc>,
 	end_time: DateTime<Utc>,
 	operations_count: u32,
 	key_hash: KeyHash,
+	#[specta(type = String)]
 	signed_download_link: Url,
 }
 

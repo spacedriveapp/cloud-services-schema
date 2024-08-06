@@ -62,5 +62,15 @@ url = { version = "2.5.2", features = ["serde"] }
 uuid = { version = "1.10.0", features = ["serde"] }
 zeroize = { version = "1.8.1", features = ["serde", "derive"] }
 
+# The same rspc and specta versions used by Spacedrive's Core
+rspc = { git = "https://github.com/spacedriveapp/rspc.git", rev = "ab12964b140991e0730c3423693533fba71efb03", features = [
+	"uuid",
+	"chrono",
+	"tracing",
+	"alpha",
+	"unstable",
+] }
+specta = { version = "=2.0.0-rc.11", features = ["chrono", "uuid"] }
+
 [dev-dependencies]
 tokio = { version = "1.39.2", features = ["full"] }

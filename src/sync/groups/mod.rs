@@ -31,11 +31,11 @@ crate::need_auth!(
 	request_join,
 );
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display, specta::Type)]
 #[serde(transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct Group {
 	pub pub_id: PubId,
 	pub name: String,

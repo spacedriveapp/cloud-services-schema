@@ -68,3 +68,29 @@ pub enum UserQuotaExceededError {
 	#[error("Not enough storage space: {available} bytes available, {required} required")]
 	NotEnoughStorageSpace { available: u64, required: u64 },
 }
+
+impl From<Error> for rspc::Error {
+	fn from(e: Error) -> Self {
+		match e {
+			Error::Client(ClientSideError::BadRequest) => {
+				Self::new(rspc::ErrorCode::BadRequest, e.to_string())
+			}
+			Error::Client(ClientSideError::Unauthorized) => {
+				Self::new(rspc::ErrorCode::Unauthorized, e.to_string())
+			}
+			Error::Client(ClientSideError::Forbidden) => {
+				Self::new(rspc::ErrorCode::Forbidden, e.to_string())
+			}
+			Error::Client(ClientSideError::NotFound(e)) => {
+				Self::with_cause(rspc::ErrorCode::NotFound, e.to_string(), e)
+			}
+			Error::Client(ClientSideError::Conflict(e)) => {
+				Self::with_cause(rspc::ErrorCode::Conflict, e.to_string(), e)
+			}
+			Error::Client(ClientSideError::UserQuotaExceeded(e)) => {
+				Self::with_cause(rspc::ErrorCode::Forbidden, e.to_string(), e)
+			}
+			Error::Server => Self::new(rspc::ErrorCode::InternalServerError, e.to_string()),
+		}
+	}
+}

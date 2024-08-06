@@ -11,7 +11,7 @@ crate::declare! {
 
 crate::need_auth!(find_key_owners);
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 #[serde(transparent)]
 pub struct KeyHash(pub String);
 
@@ -30,7 +30,7 @@ pub mod find_key_owners {
 		pub key_hash: KeyHash,
 	}
 
-	#[derive(Debug, Serialize, Deserialize)]
+	#[derive(Debug, Serialize, Deserialize, specta::Type)]
 	pub struct Response {
 		pub original_key_creator_device_pub_id: devices::Device,
 		pub devices_in_group: Vec<devices::Device>,

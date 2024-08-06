@@ -11,10 +11,10 @@ crate::declare! {
 
 crate::need_auth!(create, get, list, update, delete);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display, specta::Type)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct Location {
 	pub pub_id: PubId,
 	pub name: String,
