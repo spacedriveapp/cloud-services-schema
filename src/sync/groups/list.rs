@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use super::Group;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "SyncGroupListRequest")]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub with_library: bool,

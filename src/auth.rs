@@ -10,6 +10,7 @@ pub trait NeedAuth {
 /// Newtype wrapper for the access token
 #[derive(Serialize, Clone, Deserialize, Debug, specta::Type)]
 #[serde(transparent)]
+#[specta(transparent)]
 pub struct AccessToken(pub String);
 
 /// Enum to wrap the possible errors that can happen during authentication, used by

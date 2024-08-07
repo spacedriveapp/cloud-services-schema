@@ -33,9 +33,11 @@ crate::need_auth!(
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display, specta::Type)]
 #[serde(transparent)]
+#[specta(rename = "SyncGroupPubId", transparent)]
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "SyncGroup")]
 pub struct Group {
 	pub pub_id: PubId,
 	pub name: String,

@@ -15,6 +15,8 @@ crate::declare! {
 crate::need_auth!(delete, list, pull, push, update, update_metadata);
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[serde(transparent)]
+#[specta(transparent)]
 pub struct ObjectPubId(pub Uuid);
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]

@@ -13,6 +13,7 @@ crate::need_auth!(find_key_owners);
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 #[serde(transparent)]
+#[specta(transparent)]
 pub struct KeyHash(pub String);
 
 pub mod find_key_owners {

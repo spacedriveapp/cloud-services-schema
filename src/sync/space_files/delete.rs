@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{FilePathPubId, ObjectPubId};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "SpaceFileDeleteRequest")]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub object_pub_id: ObjectPubId,

@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{Location, PubId};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "LocationGetRequest")]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
