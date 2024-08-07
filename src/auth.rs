@@ -8,7 +8,7 @@ pub trait NeedAuth {
 }
 
 /// Newtype wrapper for the access token
-#[derive(Serialize, Clone, Deserialize, Debug)]
+#[derive(Serialize, Clone, Deserialize, Debug, specta::Type)]
 #[serde(transparent)]
 pub struct AccessToken(pub String);
 
