@@ -17,6 +17,7 @@ crate::need_auth!(create, get, list, update, delete);
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "CloudLocation")]
 pub struct Location {
 	pub pub_id: PubId,
 	pub name: String,
