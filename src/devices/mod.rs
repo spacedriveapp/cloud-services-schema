@@ -21,8 +21,33 @@ pub enum DeviceOS {
 	Linux,
 	Windows,
 	MacOS,
+	#[serde(rename = "iOS")]
 	IOS,
 	Android,
+}
+
+impl DeviceOS {
+	#[must_use]
+	pub fn from_env() -> Self {
+		match std::env::consts::OS {
+			"linux" => Self::Linux,
+			"macos" => Self::MacOS,
+			"windows" => Self::Windows,
+			"android" => Self::Android,
+			"ios" => Self::IOS,
+			_ => {
+				// The remaining options according to docs are:
+				// - freebsd
+				// - dragonfly
+				// - netbsd
+				// - openbsd
+				// - solaris
+				// They aren't even supported to begin with, so we just default to Linux as
+				// a close enough fallback
+				Self::Linux
+			}
+		}
+	}
 }
 
 #[derive(Debug, Serialize, Deserialize, specta::Type)]
