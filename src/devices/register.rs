@@ -27,8 +27,7 @@ pub struct RequestUpdate {
 #[derive(Serialize, Deserialize)]
 pub enum State {
 	RegistrationResponse(Box<RegistrationResponse<SpacedriveCipherSuite>>),
-	/// Server's [`NodeId`]
-	End(NodeId),
+	End,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -62,7 +61,7 @@ impl fmt::Debug for State {
 			Self::RegistrationResponse(_) => {
 				write!(f, "State::RegistrationResponse(<RegistrationResponseData>)")
 			}
-			Self::End(node_id) => f.debug_tuple("State::End").field(&node_id).finish(),
+			Self::End => write!(f, "State::End"),
 		}
 	}
 }

@@ -2,7 +2,6 @@ use crate::{auth::AccessToken, SpacedriveCipherSuite};
 
 use std::fmt;
 
-use iroh_base::key::NodeId;
 use opaque_ke::{CredentialFinalization, CredentialRequest, CredentialResponse};
 use serde::{Deserialize, Serialize};
 
@@ -23,8 +22,7 @@ pub struct RequestUpdate {
 #[derive(Serialize, Deserialize)]
 pub enum State {
 	LoginResponse(Box<CredentialResponse<SpacedriveCipherSuite>>),
-	/// Server's [`NodeId`]
-	End(NodeId),
+	End,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -54,7 +52,7 @@ impl fmt::Debug for State {
 			Self::LoginResponse(_) => {
 				write!(f, "State::LoginResponse(<CredentialResponseData>)")
 			}
-			Self::End(_) => write!(f, "State::End"),
+			Self::End => write!(f, "State::End"),
 		}
 	}
 }
