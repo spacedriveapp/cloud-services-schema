@@ -13,6 +13,12 @@ pub trait NeedAuth {
 #[specta(transparent)]
 pub struct AccessToken(pub String);
 
+/// Newtype wrapper for the refresh token
+#[derive(Serialize, Clone, Deserialize, Debug, specta::Type)]
+#[serde(transparent)]
+#[specta(transparent)]
+pub struct RefreshToken(pub String);
+
 /// Enum to wrap the possible errors that can happen during authentication, used by
 /// the auth middleware
 pub enum AuthError<Unauthorized, Internal>
