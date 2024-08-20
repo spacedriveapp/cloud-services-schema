@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "redhat.vscode-yaml",
+    "codezombiech.gitignore",
+    "rust-lang.rust-analyzer",
+    "editorconfig.editorconfig",
+    "tamasfe.even-better-toml"
+  ]
+}

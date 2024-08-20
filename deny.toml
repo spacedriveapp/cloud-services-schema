@@ -1,0 +1,27 @@
+[graph]
+all-features = true
+exclude-dev  = true
+
+[licenses]
+# https://www.gnu.org/licenses/license-list.html
+allow = [
+	"Apache-2.0",
+	"BSD-2-Clause",
+	"BSD-3-Clause",
+	"MIT",              # Also know as Expat
+	"Unicode-DFS-2016",
+	"Unlicense",
+	"Zlib"
+]
+confidence-threshold = 0.93
+exceptions = [
+	# We own sd-cloud-schema
+	{ allow = ["AGPL-3.0"], crate = "sd-cloud-schema" }
+]
+
+[sources]
+unknown-git      = "deny"
+unknown-registry = "deny"
+
+[sources.allow-org]
+github = ["spacedriveapp"]

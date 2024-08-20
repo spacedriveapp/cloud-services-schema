@@ -1,77 +1,79 @@
 [package]
-name = "sd-cloud-schema"
+name    = "sd-cloud-schema"
 version = "0.1.0"
-authors = ["Ericson Soares <ericson@spacedrive.com>"]
-edition = "2021"
-license = "AGPL-3.0-only"
-repository = "https://github.com/spacedriveapp/cloud-services-schema"
+
+authors      = ["Ericson Soares <ericson@spacedrive.com>"]
+autoexamples = false                                                    # TODO: Fix example
+edition      = "2021"
+license      = "AGPL-3.0-only"
+repository   = "https://github.com/spacedriveapp/cloud-services-schema"
+resolver     = "2"
 rust-version = "1.79.0"
-resolver = "2"
 
 [lints.rust]
 # Warns
-unused_qualifications = "warn"
-rust_2018_idioms = { level = "warn", priority = -1 }
-trivial_casts = "warn"
+deprecated            = "warn"
+rust_2018_idioms      = { level = "warn", priority = -1 }
+trivial_casts         = "warn"
 trivial_numeric_casts = "warn"
-unused_allocation = "warn"
-deprecated = "warn"
+unused_allocation     = "warn"
+unused_qualifications = "warn"
 # Forbids
 deprecated_in_future = "forbid"
 
 [lints.clippy]
 # Warns
-all = { level = "warn", priority = -1 }
-pedantic = { level = "warn", priority = -1 }
-correctness = { level = "warn", priority = -1 }
-perf = { level = "warn", priority = -1 }
-style = { level = "warn", priority = -1 }
-suspicious = { level = "warn", priority = -1 }
-complexity = { level = "warn", priority = -1 }
-nursery = { level = "warn", priority = -1 }
-unwrap_used = "warn"
-unnecessary_cast = "warn"
-cast_lossless = "warn"
+all                      = { level = "warn", priority = -1 }
+cast_lossless            = "warn"
 cast_possible_truncation = "warn"
-cast_possible_wrap = "warn"
-cast_precision_loss = "warn"
-cast_sign_loss = "warn"
-dbg_macro = "warn"
-deprecated_cfg_attr = "warn"
+cast_possible_wrap       = "warn"
+cast_precision_loss      = "warn"
+cast_sign_loss           = "warn"
+complexity               = { level = "warn", priority = -1 }
+correctness              = { level = "warn", priority = -1 }
+dbg_macro                = "warn"
+deprecated_cfg_attr      = "warn"
+nursery                  = { level = "warn", priority = -1 }
+pedantic                 = { level = "warn", priority = -1 }
+perf                     = { level = "warn", priority = -1 }
 separated_literal_suffix = "warn"
+style                    = { level = "warn", priority = -1 }
+suspicious               = { level = "warn", priority = -1 }
+unnecessary_cast         = "warn"
+unwrap_used              = "warn"
 # Allows
-missing_errors_doc = "allow"
+missing_errors_doc      = "allow"
 module_name_repetitions = "allow"
 
-
 [dependencies]
-argon2 = "0.5.3"
-async-stream = "0.3.5"
-chrono = { version = "0.4.38", default-features = false, features = ["serde"] }
-# Some deps still use this beta version, get rid of it when they update
-derive_more = { version = "1.0.0-beta.7", default-features = false, features = ["display"] }
-eyre = "0.6.12"
-futures-lite = { version = "2.3.0", default-features = false, features = ["alloc"] }
-iroh-base = { version = "0.23.0", features = ["key"] }
-opaque-ke = { version = "3.0.0-pre.4", features = ["argon2"] }
-paste = "1.0.15"
-quic-rpc = { version = "0.12.0", features = ["macros"] }
-serde = { version = "1.0.208", features = ["derive"] }
-thiserror = "1.0.63"
-tracing = "0.1.40"
-url = { version = "2.5.2", features = ["serde"] }
-uuid = { version = "1.10.0", features = ["serde"] }
-zeroize = { version = "1.8.1", features = ["serde", "derive"] }
+argon2       = "=0.5.3"
+async-stream = "=0.3.5"
+chrono       = { version = "=0.4.38", default-features = false, features = ["serde"] }
+# Update blocked due to iroh-base
+derive_more  = { version = "=1.0.0-beta.7", default-features = false, features = ["display"] }
+eyre         = "=0.6.12"
+futures-lite = { version = "=2.3.0", default-features = false, features = ["alloc"] }
+iroh-base    = { version = "=0.23.0", features = ["key"] }
+opaque-ke    = { version = "=3.0.0-pre.4", features = ["argon2"] }
+paste        = "=1.0.15"
+quic-rpc     = { version = "=0.12.0", features = ["macros"] }
+serde        = { version = "=1.0.208", features = ["derive"] }
+thiserror    = "=1.0.63"
+tracing      = "=0.1.40"
+url          = { version = "=2.5.2", features = ["serde"] }
+uuid         = { version = "=1.10.0", features = ["serde"] }
+zeroize      = { version = "=1.8.1", features = ["derive", "serde"] }
 
-# The same rspc and specta versions used by Spacedrive's Core
-rspc = { git = "https://github.com/spacedriveapp/rspc.git", rev = "0018e80231", features = [
-	"uuid",
-	"chrono",
-	"tracing",
-	"alpha",
-	"unstable",
-] }
+# The same versions used by Spacedrive's Core
+# https://github.com/spacedriveapp/spacedrive/blob/0.4.2/Cargo.toml#L52
 specta = { version = "=2.0.0-rc.20", features = ["chrono", "uuid"] }
 
+# The same versions used by Spacedrive's Core
+# https://github.com/spacedriveapp/spacedrive/blob/0.4.2/Cargo.toml#L85-L87
+[dependencies.rspc]
+features = ["alpha", "chrono", "tracing", "unstable", "uuid"]
+git      = "https://github.com/spacedriveapp/rspc.git"
+rev      = "0018e80231"
+
 [dev-dependencies]
-tokio = { version = "1.39.3", features = ["full"] }
+tokio = { version = "=1.39.3", features = ["full"] }
