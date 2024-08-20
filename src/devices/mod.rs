@@ -50,6 +50,23 @@ impl DeviceOS {
 	}
 }
 
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+pub enum HardwareModel {
+	Other,
+	MacStudio,
+	MacBookAir,
+	MacBookPro,
+	MacBook,
+	MacMini,
+	MacPro,
+	IMac,
+	IMacPro,
+	IPad,
+	IPhone,
+	Simulator,
+	Android,
+}
+
 #[derive(Debug, Serialize, Deserialize, specta::Type)]
 pub struct Device {
 	pub pub_id: PubId,
@@ -61,6 +78,7 @@ pub struct Device {
 	pub connection_id: NodeId,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,
+	pub hardware_model: HardwareModel,
 }
 
 pub mod delete;
