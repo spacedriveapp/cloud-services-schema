@@ -48,14 +48,15 @@ module_name_repetitions = "allow"
 argon2 = "0.5.3"
 async-stream = "0.3.5"
 chrono = { version = "0.4.38", default-features = false, features = ["serde"] }
-derive_more = { version = "0.99.18", default-features = false, features = ["display"] }
+# Some deps still use this beta version, get rid of it when they update
+derive_more = { version = "1.0.0-beta.7", default-features = false, features = ["display"] }
 eyre = "0.6.12"
 futures-lite = { version = "2.3.0", default-features = false, features = ["alloc"] }
-iroh-base = { version = "0.22.0", features = ["key"] }
+iroh-base = { version = "0.23.0", features = ["key"] }
 opaque-ke = { version = "3.0.0-pre.4", features = ["argon2"] }
 paste = "1.0.15"
-quic-rpc = { version = "0.11.0", features = ["macros"] }
-serde = { version = "1.0.204", features = ["derive"] }
+quic-rpc = { version = "0.12.0", features = ["macros"] }
+serde = { version = "1.0.208", features = ["derive"] }
 thiserror = "1.0.63"
 tracing = "0.1.40"
 url = { version = "2.5.2", features = ["serde"] }
@@ -73,4 +74,4 @@ rspc = { git = "https://github.com/spacedriveapp/rspc.git", rev = "0018e80231", 
 specta = { version = "=2.0.0-rc.20", features = ["chrono", "uuid"] }
 
 [dev-dependencies]
-tokio = { version = "1.39.2", features = ["full"] }
+tokio = { version = "1.39.3", features = ["full"] }
