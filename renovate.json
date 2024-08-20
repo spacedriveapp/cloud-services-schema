@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+
+    ":label(type/renovate)",
+
+    ":disableRateLimiting",
+    ":ignoreUnstable",
+    ":separateMajorReleases",
+    ":automergePr",
+    ":automergeRequireAllStatusChecks",
+    ":automergeAll",
+    ":semanticCommits",
+
+    ":enableVulnerabilityAlerts",
+    ":enableVulnerabilityAlertsWithLabel(security)"
+  ],
+
+  "rebaseWhen": "conflicted",
+  "platformAutomerge": true,
+  "rebaseLabel": "renovate/rebase",
+  "stopUpdatingLabel": "renovate/stop-updating",
+
+  "major": { "labels": ["bump/major"] },
+  "minor": { "labels": ["bump/minor"] },
+  "patch": { "labels": ["bump/patch"] },
+  "digest": { "labels": ["bump/digest"] }
+}
