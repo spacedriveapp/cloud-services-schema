@@ -56,6 +56,7 @@ pub struct Device {
 	pub name: String,
 	pub os: DeviceOS,
 	pub storage_size: u64,
+	pub used_storage: u64,
 	#[specta(type = String)]
 	pub connection_id: NodeId,
 	pub created_at: DateTime<Utc>,
