@@ -5,13 +5,8 @@
 
     ":label(type/renovate)",
 
-    ":docker",
-    "docker:enableMajor",
-    "docker:pinDigests",
-
     ":disableRateLimiting",
     ":ignoreUnstable",
-    ":pinVersions",
     ":separateMajorReleases",
     ":automergePr",
     ":automergeRequireAllStatusChecks",
@@ -30,14 +25,5 @@
   "major": { "labels": ["bump/major"] },
   "minor": { "labels": ["bump/minor"] },
   "patch": { "labels": ["bump/patch"] },
-  "pin": { "labels": ["bump/pin"] },
-  "digest": { "labels": ["bump/digest"] },
-
-  "packageRules": [
-    {
-      "matchPackageNames": ["rustls-old"],
-      "matchManagers": ["cargo"],
-      "enabled": false
-    }
-  ]
+  "digest": { "labels": ["bump/digest"] }
 }
