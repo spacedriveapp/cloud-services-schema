@@ -50,6 +50,18 @@ pub struct Group {
 	pub updated_at: DateTime<Utc>,
 }
 
+#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "SyncGroup")]
+pub struct GroupWithLibraryAndDevices {
+	pub pub_id: PubId,
+	pub name: String,
+	pub latest_key_hash: KeyHash,
+	pub library: libraries::Library,
+	pub devices: Vec<devices::Device>,
+	pub created_at: DateTime<Utc>,
+	pub updated_at: DateTime<Utc>,
+}
+
 pub mod create;
 pub mod delete;
 pub mod get;
