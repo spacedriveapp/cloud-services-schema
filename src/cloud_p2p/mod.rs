@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 /// ALPN for the Spacedrive Cloud Services - Cloud P2P with associated
 /// constants for each existing version and an alias for the latest version.
-/// This application layer protocol is used when a cloud service needs to devices communicating 
+/// This application layer protocol is used when a cloud service needs to devices communicating
 /// with each other, like for sending sync keys.
 pub struct CloudP2PALPN;
 

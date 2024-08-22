@@ -31,7 +31,20 @@ crate::need_auth!(
 	request_join,
 );
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, derive_more::Display, specta::Type)]
+#[derive(
+	Debug,
+	Clone,
+	Copy,
+	Serialize,
+	Deserialize,
+	derive_more::Display,
+	specta::Type,
+	PartialEq,
+	Eq,
+	Hash,
+	PartialOrd,
+	Ord,
+)]
 #[serde(transparent)]
 #[specta(rename = "SyncGroupPubId", transparent)]
 pub struct PubId(pub Uuid);
