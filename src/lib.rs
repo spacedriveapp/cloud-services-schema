@@ -18,8 +18,8 @@ pub mod locations;
 /// Sync service and it's related requests and responses
 pub mod sync;
 
-/// Service running as a server in the user's side
-pub mod user_server;
+/// Service running on the user's side, for cloud assisted p2p communication
+pub mod cloud_p2p;
 
 /// Requests and responses for dealing with user's data
 pub mod users;
