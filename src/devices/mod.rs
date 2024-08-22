@@ -67,7 +67,7 @@ pub enum HardwareModel {
 	Android,
 }
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct Device {
 	pub pub_id: PubId,
 	pub name: String,

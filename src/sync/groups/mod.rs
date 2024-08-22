@@ -49,7 +49,7 @@ crate::need_auth!(
 #[specta(rename = "SyncGroupPubId", transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "SyncGroup")]
 pub struct Group {
 	pub pub_id: PubId,
@@ -63,7 +63,7 @@ pub struct Group {
 	pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "SyncGroup")]
 pub struct GroupWithLibraryAndDevices {
 	pub pub_id: PubId,

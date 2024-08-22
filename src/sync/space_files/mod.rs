@@ -22,7 +22,7 @@ pub struct ObjectPubId(pub Uuid);
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
 pub struct FilePathPubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct SpaceFile {
 	pub object_pub_id: ObjectPubId,
 	pub file_path_pub_id: FilePathPubId,

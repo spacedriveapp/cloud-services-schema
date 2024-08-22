@@ -16,7 +16,7 @@ crate::need_auth!(create, get, list, update, delete);
 #[specta(rename = "LibraryPubId", transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct Library {
 	pub pub_id: PubId,
 	pub name: String,

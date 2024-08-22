@@ -15,7 +15,7 @@ crate::need_auth!(delete_older, pull, push);
 
 use super::KeyHash;
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct MessagesCollection {
 	original_device_pub_id: Option<devices::PubId>,
 	start_time: DateTime<Utc>,
