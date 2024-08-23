@@ -20,6 +20,7 @@ crate::declare! {
 pub enum CloudP2PError {
 	Rejected,
 	UnableToConnect,
+	TimedOut,
 }
 
 pub mod authorize_new_device_in_sync_group;
