@@ -6,12 +6,12 @@ use url::Url;
 
 crate::declare! {
 	parent = super,
-	rpc = [delete_older],
+	rpc = [delete_older, get_latest_time],
 	server_stream = [pull],
 	bidirectional_stream = [push],
 }
 
-crate::need_auth!(delete_older, pull, push);
+crate::need_auth!(delete_older, pull, push, get_latest_time);
 
 use super::KeyHash;
 
@@ -27,5 +27,6 @@ pub struct MessagesCollection {
 }
 
 pub mod delete_older;
+pub mod get_latest_time;
 pub mod pull;
 pub mod push;
