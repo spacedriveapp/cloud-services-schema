@@ -19,13 +19,29 @@ crate::need_auth!(get, list, update, delete, register, hello);
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[repr(i32)]
 pub enum DeviceOS {
-	Linux,
-	Windows,
-	MacOS,
+	Linux = 1,
+	Windows = 2,
+	MacOS = 3,
 	#[serde(rename = "iOS")]
-	IOS,
-	Android,
+	IOS = 4,
+	Android = 5,
+}
+
+impl TryFrom<i32> for DeviceOS {
+	type Error = i32;
+
+	fn try_from(value: i32) -> Result<Self, Self::Error> {
+		match value {
+			1 => Ok(Self::Linux),
+			2 => Ok(Self::Windows),
+			3 => Ok(Self::MacOS),
+			4 => Ok(Self::IOS),
+			5 => Ok(Self::Android),
+			_ => Err(value),
+		}
+	}
 }
 
 impl DeviceOS {
