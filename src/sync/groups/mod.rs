@@ -64,7 +64,7 @@ pub struct Group {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroup")]
+#[specta(rename = "SyncGroupWithLibraryAndDevices")]
 pub struct GroupWithLibraryAndDevices {
 	pub pub_id: PubId,
 	pub name: String,
