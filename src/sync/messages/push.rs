@@ -1,5 +1,6 @@
 use crate::{auth::AccessToken, devices, sync::groups};
 
+use crate::sync::KeyHash;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use url::Url;
@@ -10,6 +11,7 @@ pub struct Request {
 	pub group_pub_id: groups::PubId,
 	pub device_pub_id: devices::PubId,
 	pub operations_count: u32,
+	pub key_hash: KeyHash,
 	pub start_time: DateTime<Utc>,
 	pub end_time: DateTime<Utc>,
 	pub expected_blob_size: u64,
