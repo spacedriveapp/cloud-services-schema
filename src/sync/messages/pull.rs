@@ -12,7 +12,7 @@ pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,
 	pub current_device_pub_id: devices::PubId,
-	pub start_time: DateTime<Utc>,
+	pub start_time_per_device: Vec<(devices::PubId, DateTime<Utc>)>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
