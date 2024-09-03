@@ -17,13 +17,13 @@ use super::KeyHash;
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct MessagesCollection {
-	original_device_pub_id: devices::PubId,
-	start_time: DateTime<Utc>,
-	end_time: DateTime<Utc>,
-	operations_count: u32,
-	key_hash: KeyHash,
+	pub original_device_pub_id: devices::PubId,
+	pub start_time: DateTime<Utc>,
+	pub end_time: DateTime<Utc>,
+	pub operations_count: u32,
+	pub key_hash: KeyHash,
 	#[specta(type = String)]
-	signed_download_link: Url,
+	pub signed_download_link: Url,
 }
 
 pub mod delete_older;
