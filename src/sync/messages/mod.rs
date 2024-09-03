@@ -17,7 +17,7 @@ use super::KeyHash;
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct MessagesCollection {
-	original_device_pub_id: Option<devices::PubId>,
+	original_device_pub_id: devices::PubId,
 	start_time: DateTime<Utc>,
 	end_time: DateTime<Utc>,
 	operations_count: u32,
