@@ -15,6 +15,7 @@ pub struct Request {
 	pub name: String,
 	pub os: DeviceOS,
 	pub storage_size: u64,
+	pub used_storage: u64,
 	pub connection_id: NodeId,
 	pub opaque_register_message: Box<RegistrationRequest<SpacedriveCipherSuite>>,
 }
