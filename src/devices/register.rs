@@ -6,7 +6,7 @@ use iroh_base::key::NodeId;
 use opaque_ke::{RegistrationRequest, RegistrationResponse, RegistrationUpload};
 use serde::{Deserialize, Serialize};
 
-use super::{DeviceOS, PubId};
+use super::{DeviceOS, HardwareModel, PubId};
 
 #[derive(Serialize, Deserialize)]
 pub struct Request {
@@ -14,6 +14,7 @@ pub struct Request {
 	pub pub_id: PubId,
 	pub name: String,
 	pub os: DeviceOS,
+	pub hardware_model: HardwareModel,
 	pub storage_size: u64,
 	pub used_storage: u64,
 	pub connection_id: NodeId,
@@ -41,7 +42,9 @@ impl fmt::Debug for Request {
 			.field("pub_id", &self.pub_id)
 			.field("name", &self.name)
 			.field("os", &self.os)
+			.field("hardware_model", &self.hardware_model)
 			.field("storage_size", &self.storage_size)
+			.field("used_storage", &self.used_storage)
 			.field("connection_id", &self.connection_id)
 			.field("opaque_register_message", &"<RegistrationRequestData>")
 			.finish()
