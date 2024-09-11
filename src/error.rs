@@ -36,6 +36,8 @@ pub enum NotFoundError {
 	Device(devices::PubId),
 	#[error("Sync group not found")]
 	SyncGroup(sync::groups::PubId),
+	#[error("Key hash not found")]
+	KeyHash(sync::KeyHash),
 	#[error("Library not found")]
 	Library(libraries::PubId),
 	#[error("Location not found")]
