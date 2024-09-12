@@ -9,7 +9,6 @@ use super::Group;
 pub struct Request {
 	pub access_token: AccessToken,
 	pub with_library: bool,
-	pub with_devices: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
