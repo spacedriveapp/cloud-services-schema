@@ -53,7 +53,6 @@ pub struct PubId(pub Uuid);
 #[specta(rename = "SyncGroup")]
 pub struct Group {
 	pub pub_id: PubId,
-	pub name: String,
 	pub latest_key_hash: KeyHash,
 	pub library: Option<libraries::Library>,
 	pub devices: Option<Vec<devices::Device>>,
@@ -67,7 +66,6 @@ pub struct Group {
 #[specta(rename = "SyncGroupWithLibraryAndDevices")]
 pub struct GroupWithLibraryAndDevices {
 	pub pub_id: PubId,
-	pub name: String,
 	pub latest_key_hash: KeyHash,
 	pub library: libraries::Library,
 	pub devices: Vec<devices::Device>,
