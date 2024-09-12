@@ -1,4 +1,4 @@
-use crate::auth::AccessToken;
+use crate::{auth::AccessToken, libraries};
 
 use serde::{Deserialize, Serialize};
 
@@ -8,6 +8,7 @@ use super::Location;
 #[specta(rename = "LocationListRequest")]
 pub struct Request {
 	pub access_token: AccessToken,
+	pub library_pub_id: libraries::PubId,
 	pub with_library: bool,
 	pub with_device: bool,
 }
