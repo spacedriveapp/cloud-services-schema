@@ -1,4 +1,4 @@
-use crate::{devices, sync::groups, libraries};
+use crate::{devices, libraries, sync::groups};
 
 use serde::{Deserialize, Serialize};
 
@@ -14,5 +14,5 @@ pub struct Response {
 	pub keys: Vec<Vec<u8>>,
 	pub library_pub_id: libraries::PubId,
 	pub library_name: String,
-	pub library_description: Option<String>
+	pub library_description: Option<String>,
 }

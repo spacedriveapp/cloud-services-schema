@@ -69,8 +69,12 @@ macro_rules! router {
 									))
 						},
 					)+)?
-					_ => {
-						unreachable!("Request updates MUST never come first");
+					req => {
+						::tracing::error!(
+							request_type = ::std::any::type_name_of_val(&req),
+							"Update requests are not allowed as first message of a request"
+						);
+						::eyre::bail!("Requests starting with update message aren't allowed");
 					}
 				}
 			}

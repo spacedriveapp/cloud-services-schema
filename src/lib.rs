@@ -1,6 +1,6 @@
 // Re-exporting the opaque-ke crate and NodeId from iroh-base
-pub use opaque_ke;
 pub use iroh_base::key::NodeId;
+pub use opaque_ke;
 
 /// Exporting the error type
 pub use error::Error;
