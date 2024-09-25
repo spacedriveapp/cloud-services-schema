@@ -1,5 +1,5 @@
-// Re-exporting the opaque-ke crate and NodeId from iroh-base
-pub use iroh_base::key::NodeId;
+// Re-exporting the opaque-ke crate and NodeId and SecretKey from iroh-base
+pub use iroh_base::key::{NodeId, SecretKey};
 pub use opaque_ke;
 
 /// Exporting the error type
