@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{KeyHash, PubId};
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroupRemoveDeviceRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: PubId,

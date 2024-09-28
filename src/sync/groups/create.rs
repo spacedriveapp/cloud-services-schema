@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{KeyHash, PubId};
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroupCreateRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub key_hash: KeyHash,

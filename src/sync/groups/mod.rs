@@ -46,11 +46,11 @@ crate::need_auth!(
 	Ord,
 )]
 #[serde(transparent)]
-#[specta(rename = "SyncGroupPubId", transparent)]
+#[specta(rename = "CloudSyncGroupPubId", transparent)]
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroup")]
+#[specta(rename = "CloudSyncGroup")]
 pub struct Group {
 	pub pub_id: PubId,
 	pub latest_key_hash: KeyHash,
@@ -63,7 +63,7 @@ pub struct Group {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroupWithLibraryAndDevices")]
+#[specta(rename = "CloudSyncGroupWithLibraryAndDevices")]
 pub struct GroupWithLibraryAndDevices {
 	pub pub_id: PubId,
 	pub latest_key_hash: KeyHash,

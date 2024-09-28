@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::Library;
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "LibraryListRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub with_device: bool,

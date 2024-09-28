@@ -24,7 +24,7 @@ crate::need_auth!(get, list, update, delete, register, hello);
 	Hash,
 )]
 #[serde(transparent)]
-#[specta(rename = "DevicePubId", transparent)]
+#[specta(rename = "CloudDevicePubId", transparent)]
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
@@ -95,6 +95,7 @@ pub enum HardwareModel {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "CloudDevice")]
 pub struct Device {
 	pub pub_id: PubId,
 	pub name: String,

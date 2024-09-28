@@ -4,8 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{Device, PubId};
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "DeviceGetRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,

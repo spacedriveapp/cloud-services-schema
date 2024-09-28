@@ -5,8 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use super::PubId;
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SyncGroupJoinRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: PubId,

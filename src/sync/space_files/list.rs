@@ -6,8 +6,7 @@ use super::SpaceFile;
 
 pub const BATCH_SIZE: usize = 100;
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SpaceFileListRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,

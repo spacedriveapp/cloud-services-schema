@@ -5,8 +5,7 @@ use url::Url;
 
 use super::{FilePathPubId, ObjectPubId};
 
-#[derive(Debug, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "SpaceFileUpdateRequest")]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub object_pub_id: ObjectPubId,

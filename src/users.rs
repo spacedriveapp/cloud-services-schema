@@ -10,8 +10,7 @@ pub mod create {
 
 	use serde::{Deserialize, Serialize};
 
-	#[derive(Debug, Serialize, Deserialize, specta::Type)]
-	#[specta(rename = "UserCreateRequest")]
+	#[derive(Debug, Serialize, Deserialize)]
 	pub struct Request {
 		pub access_token: AccessToken,
 	}
@@ -25,8 +24,7 @@ pub mod delete {
 
 	use serde::{Deserialize, Serialize};
 
-	#[derive(Debug, Serialize, Deserialize, specta::Type)]
-	#[specta(rename = "UserDeleteRequest")]
+	#[derive(Debug, Serialize, Deserialize)]
 	pub struct Request {
 		pub access_token: AccessToken,
 	}
