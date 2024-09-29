@@ -10,7 +10,7 @@ macro_rules! router {
 		$(authed_routes = {$($auth_route:tt -> $auth_rpc_kind:tt),+ $(,)?} $(,)?)?
         $(routes = {$($route:tt -> $rpc_kind:tt),+ $(,)?} $(,)?)?
     ) => {
-		::paste::paste! {
+		$crate::paste::paste! {
 			#[allow(unreachable_patterns, unused)]
 			pub async fn route<S, E>(
 				app: $app,
@@ -70,11 +70,12 @@ macro_rules! router {
 						},
 					)+)?
 					req => {
-						::tracing::error!(
+						::tracing::warn!(
 							request_type = ::std::any::type_name_of_val(&req),
 							"Update requests are not allowed as first message of a request"
 						);
-						::eyre::bail!("Requests starting with update message aren't allowed");
+						
+						Ok(())
 					}
 				}
 			}

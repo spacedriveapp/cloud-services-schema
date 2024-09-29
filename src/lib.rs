@@ -39,6 +39,9 @@ mod macros;
 /// middlewares for authentication and error handling
 pub mod utils;
 
+/// Re-exporting the paste crate as the router macro needs it
+pub use paste;
+
 /// ALPN for the Spacedrive Cloud Services with associated constants for each existing version
 /// and an alias for the latest version
 pub struct ServicesALPN;

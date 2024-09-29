@@ -15,8 +15,6 @@ pub struct Request {
 	pub name: String,
 	pub os: DeviceOS,
 	pub hardware_model: HardwareModel,
-	pub storage_size: u64,
-	pub used_storage: u64,
 	pub connection_id: NodeId,
 	pub opaque_register_message: Box<RegistrationRequest<SpacedriveCipherSuite>>,
 }
@@ -43,8 +41,6 @@ impl fmt::Debug for Request {
 			.field("name", &self.name)
 			.field("os", &self.os)
 			.field("hardware_model", &self.hardware_model)
-			.field("storage_size", &self.storage_size)
-			.field("used_storage", &self.used_storage)
 			.field("connection_id", &self.connection_id)
 			.field("opaque_register_message", &"<RegistrationRequestData>")
 			.finish()
