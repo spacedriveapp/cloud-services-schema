@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Request {
-	pub sync_group: groups::GroupWithLibraryAndDevices,
+	pub sync_group: groups::GroupWithDevices,
 	pub asking_device: devices::Device,
 }
 

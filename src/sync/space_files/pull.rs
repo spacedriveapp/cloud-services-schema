@@ -9,6 +9,7 @@ pub struct Request {
 	pub access_token: AccessToken,
 	pub object_pub_id: ObjectPubId,
 	pub file_path_pub_id: FilePathPubId,
+	pub name: String,
 	pub group_pub_id: groups::PubId,
 	pub current_device_pub_id: devices::PubId,
 }

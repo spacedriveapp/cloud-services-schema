@@ -50,25 +50,35 @@ crate::need_auth!(
 pub struct PubId(pub Uuid);
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "CloudSyncGroup")]
-pub struct Group {
+#[specta(rename = "CloudSyncGroupBaseData")]
+pub struct GroupBaseData {
 	pub pub_id: PubId,
 	pub latest_key_hash: KeyHash,
-	pub library: Option<libraries::Library>,
-	pub devices: Option<Vec<devices::Device>>,
-	pub total_sync_messages_bytes: Option<u64>,
-	pub total_space_files_bytes: Option<u64>,
+	pub library: libraries::Library,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSyncGroupWithLibraryAndDevices")]
-pub struct GroupWithLibraryAndDevices {
+pub struct GroupWithDevices {
 	pub pub_id: PubId,
 	pub latest_key_hash: KeyHash,
 	pub library: libraries::Library,
 	pub devices: Vec<devices::Device>,
+	pub created_at: DateTime<Utc>,
+	pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[specta(rename = "CloudSyncGroup")]
+pub struct Group {
+	pub pub_id: PubId,
+	pub latest_key_hash: KeyHash,
+	pub library: libraries::Library,
+	pub devices: Vec<devices::Device>,
+	pub total_sync_messages_bytes: u64,
+	pub total_space_files_bytes: u64,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,
 }

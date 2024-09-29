@@ -12,8 +12,6 @@ pub struct Request {
 	pub file_path_pub_id: FilePathPubId,
 	pub device_pub_id: devices::PubId,
 	pub group_pub_id: groups::PubId,
-	pub name: String,
-	pub mime_type: String,
 	pub size: u64,
 }
 

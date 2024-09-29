@@ -7,12 +7,12 @@ use super::KeyHash;
 
 crate::declare! {
 	parent = super,
-	rpc = [delete, pull, update_metadata],
+	rpc = [delete, pull],
 	server_stream = [list],
 	bidirectional_stream = [push, update],
 }
 
-crate::need_auth!(delete, list, pull, push, update, update_metadata);
+crate::need_auth!(delete, list, pull, push, update);
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
 #[serde(transparent)]
@@ -30,9 +30,7 @@ pub struct SpaceFile {
 	pub object_pub_id: ObjectPubId,
 	pub file_path_pub_id: FilePathPubId,
 	pub key_hash: KeyHash,
-	pub name: String,
 	pub size: u64,
-	pub mime_type: String,
 	pub uploaded_at: DateTime<Utc>,
 	#[serde(skip_serializing_if = "Option::is_none")]
 	#[serde(default)]
@@ -45,4 +43,3 @@ pub mod list;
 pub mod pull;
 pub mod push;
 pub mod update;
-pub mod update_metadata;

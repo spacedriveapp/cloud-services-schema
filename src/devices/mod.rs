@@ -100,13 +100,11 @@ pub struct Device {
 	pub pub_id: PubId,
 	pub name: String,
 	pub os: DeviceOS,
-	pub storage_size: u64,
-	pub used_storage: u64,
+	pub hardware_model: HardwareModel,
 	#[specta(type = String)]
 	pub connection_id: NodeId,
 	pub created_at: DateTime<Utc>,
 	pub updated_at: DateTime<Utc>,
-	pub hardware_model: HardwareModel,
 }
 
 pub mod delete;
