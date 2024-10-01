@@ -60,7 +60,7 @@ pub struct GroupBaseData {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[specta(rename = "CloudSyncGroupWithLibraryAndDevices")]
+#[specta(rename = "CloudSyncGroupWithDevices")]
 pub struct GroupWithDevices {
 	pub pub_id: PubId,
 	pub latest_key_hash: KeyHash,
