@@ -19,6 +19,7 @@ pub struct Request {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[serde(tag = "kind", content = "data")]
 #[specta(rename = "CloudSyncGroupGetResponseKind")]
 pub enum ResponseKind {
 	WithDevices(GroupWithDevices),

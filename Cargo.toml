@@ -50,15 +50,15 @@ argon2       = "0.5.3"
 async-stream = "0.3.5"
 chrono       = { version = "0.4.38", default-features = false, features = ["serde"] }
 # Update blocked due to iroh-base
-derive_more  = { version = "1.0.0-beta.7", default-features = false, features = ["display"] }
+derive_more  = { version = "1.0.0", default-features = false, features = ["display"] }
 eyre         = "0.6.12"
 futures-lite = { version = "2.3.0", default-features = false, features = ["alloc"] }
-iroh-base    = { version = "0.25.0", features = ["key"] }
+iroh-base    = { version = "0.26.0", features = ["key"] }
 opaque-ke = { git = "https://github.com/spacedriveapp/opaque-ke", rev = "76f48e4a8d", features = ["argon2"] }
 paste        = "1.0.15"
-quic-rpc     = { version = "0.12.0", features = ["macros"] }
-serde        = { version = "1.0.208", features = ["derive"] }
-thiserror    = "1.0.63"
+quic-rpc     = { version = "0.12.1", features = ["macros"] }
+serde        = { version = "1.0.210", features = ["derive"] }
+thiserror    = "1.0.64"
 tracing      = "0.1.40"
 url          = { version = "2.5.2", features = ["serde"] }
 uuid         = { version = "1.10.0", features = ["serde"] }
@@ -76,4 +76,4 @@ git      = "https://github.com/spacedriveapp/rspc.git"
 rev      = "7308bb2ce0"
 
 [dev-dependencies]
-tokio = { version = "1.39.3", features = ["full"] }
+tokio = { version = "1.40.0", features = ["full"] }
