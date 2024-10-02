@@ -18,12 +18,7 @@ pub struct Request {
 	pub kind: RequestKind,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
-#[specta(
-	rename = "CloudSyncGroupGetResponseKind",
-	tag = "kind",
-	content = "data"
-)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ResponseKind {
 	WithDevices(GroupWithDevices),
 	FullData(Group),
