@@ -42,6 +42,8 @@ pub enum NotFoundError {
 	Library(libraries::PubId),
 	#[error("Location not found")]
 	Location(locations::PubId),
+	#[error("Latest sync message timestamp not found")]
+	LatestSyncMessageTime,
 	#[error("SpaceFile not found")]
 	SpaceFile {
 		object_pub_id: sync::space_files::ObjectPubId,
