@@ -4,11 +4,12 @@ use serde::{Deserialize, Serialize};
 
 use super::{Group, GroupWithDevices, PubId};
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[repr(u8)]
 #[specta(rename = "CloudSyncGroupGetRequestKind")]
 pub enum RequestKind {
-	WithDevices,
-	FullData,
+	WithDevices = 0,
+	FullData = 1,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

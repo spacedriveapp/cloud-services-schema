@@ -74,7 +74,7 @@ macro_rules! router {
 							request_type = ::std::any::type_name_of_val(&req),
 							"Update requests are not allowed as first message of a request"
 						);
-						
+
 						Ok(())
 					}
 				}
