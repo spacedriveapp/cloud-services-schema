@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{DeviceOS, HardwareModel, PubId};
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
@@ -19,18 +19,18 @@ pub struct Request {
 	pub opaque_register_message: Box<RegistrationRequest<SpacedriveCipherSuite>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub struct RequestUpdate {
 	pub opaque_registration_finish: Box<RegistrationUpload<SpacedriveCipherSuite>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub enum State {
 	RegistrationResponse(Box<RegistrationResponse<SpacedriveCipherSuite>>),
 	End,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response(pub State);
 
 impl fmt::Debug for Request {

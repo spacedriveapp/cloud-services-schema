@@ -15,7 +15,7 @@ crate::need_auth!(delete_older, pull, push, get_latest_time);
 
 use super::KeyHash;
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSyncMessagesCollection")]
 pub struct MessagesCollection {
 	pub original_device_pub_id: devices::PubId,

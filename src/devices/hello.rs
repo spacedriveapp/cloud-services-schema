@@ -7,25 +7,25 @@ use serde::{Deserialize, Serialize};
 
 use super::PubId;
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
 	pub opaque_login_message: Box<CredentialRequest<SpacedriveCipherSuite>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub struct RequestUpdate {
 	pub opaque_login_finish: Box<CredentialFinalization<SpacedriveCipherSuite>>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(PartialEq, Eq, Serialize, Deserialize)]
 pub enum State {
 	LoginResponse(Box<CredentialResponse<SpacedriveCipherSuite>>),
 	End,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response(pub State);
 
 impl fmt::Debug for Request {

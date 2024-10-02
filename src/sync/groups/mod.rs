@@ -49,7 +49,7 @@ crate::need_auth!(
 #[specta(rename = "CloudSyncGroupPubId", transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSyncGroupBaseData")]
 pub struct GroupBaseData {
 	pub pub_id: PubId,
@@ -59,7 +59,7 @@ pub struct GroupBaseData {
 	pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSyncGroupWithDevices")]
 pub struct GroupWithDevices {
 	pub pub_id: PubId,
@@ -70,7 +70,7 @@ pub struct GroupWithDevices {
 	pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSyncGroup")]
 pub struct Group {
 	pub pub_id: PubId,

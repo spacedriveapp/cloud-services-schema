@@ -14,17 +14,17 @@ crate::declare! {
 
 crate::need_auth!(delete, list, pull, push, update);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[serde(transparent)]
 #[specta(transparent, rename = "CloudObjectPubId")]
 pub struct ObjectPubId(pub Uuid);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[serde(transparent)]
 #[specta(transparent, rename = "CloudFilePathPubId")]
 pub struct FilePathPubId(pub Uuid);
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudSpaceFile")]
 pub struct SpaceFile {
 	pub object_pub_id: ObjectPubId,

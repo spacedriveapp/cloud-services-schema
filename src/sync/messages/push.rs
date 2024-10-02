@@ -5,7 +5,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,
@@ -17,16 +17,16 @@ pub struct Request {
 	pub expected_blob_size: u64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UpdateKind {
 	Ping,
 	End,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RequestUpdate(pub UpdateKind);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ResponseKind {
 	SinglePresignedUrl(Url),
 	ManyPresignedUrls(Vec<Url>),
@@ -34,5 +34,5 @@ pub enum ResponseKind {
 	End,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response(pub ResponseKind);

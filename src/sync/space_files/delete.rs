@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::{FilePathPubId, ObjectPubId};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub object_pub_id: ObjectPubId,
@@ -12,5 +12,5 @@ pub struct Request {
 	pub group_pub_id: groups::PubId,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response;

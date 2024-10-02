@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 
 use super::PubId;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub pub_id: PubId,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response;

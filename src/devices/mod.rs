@@ -27,7 +27,7 @@ crate::need_auth!(get, list, update, delete, register, hello);
 #[specta(rename = "CloudDevicePubId", transparent)]
 pub struct PubId(pub Uuid);
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[repr(i32)]
 pub enum DeviceOS {
 	Linux = 1,
@@ -77,7 +77,7 @@ impl DeviceOS {
 	}
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub enum HardwareModel {
 	Other,
 	MacStudio,
@@ -94,7 +94,7 @@ pub enum HardwareModel {
 	Android,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 #[specta(rename = "CloudDevice")]
 pub struct Device {
 	pub pub_id: PubId,

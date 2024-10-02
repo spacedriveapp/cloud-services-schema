@@ -8,13 +8,13 @@ pub trait NeedAuth {
 }
 
 /// Newtype wrapper for the access token
-#[derive(Serialize, Clone, Deserialize, Debug, specta::Type)]
+#[derive(Serialize, Clone, PartialEq, Eq, Deserialize, Debug, specta::Type)]
 #[serde(transparent)]
 #[specta(transparent)]
 pub struct AccessToken(pub String);
 
 /// Newtype wrapper for the refresh token
-#[derive(Serialize, Clone, Deserialize, Debug, specta::Type)]
+#[derive(Serialize, Clone, PartialEq, Eq, Deserialize, Debug, specta::Type)]
 #[serde(transparent)]
 #[specta(transparent)]
 pub struct RefreshToken(pub String);

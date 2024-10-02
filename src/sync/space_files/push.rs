@@ -5,7 +5,7 @@ use url::Url;
 
 use super::{FilePathPubId, ObjectPubId};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub object_pub_id: ObjectPubId,
@@ -15,16 +15,16 @@ pub struct Request {
 	pub size: u64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UpdateKind {
 	Ping,
 	End,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RequestUpdate(pub UpdateKind);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Status {
 	Uploaded,
 	Relinked,

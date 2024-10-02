@@ -12,7 +12,7 @@ crate::declare! {
 crate::need_auth!(find_key_owners);
 
 #[derive(
-	Debug, Clone, Serialize, Deserialize, specta::Type, Hash, Eq, PartialEq, Ord, PartialOrd,
+	Debug, Clone, PartialEq, Eq, Serialize, Deserialize, specta::Type, Hash, Ord, PartialOrd,
 )]
 #[serde(transparent)]
 #[specta(transparent, rename = "CloudSyncKeyHash")]
@@ -25,7 +25,7 @@ pub mod find_key_owners {
 
 	use super::{groups, KeyHash};
 
-	#[derive(Debug, Serialize, Deserialize)]
+	#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 	pub struct Request {
 		pub access_token: AccessToken,
 		pub group_pub_id: groups::PubId,
@@ -33,7 +33,7 @@ pub mod find_key_owners {
 		pub key_hash: KeyHash,
 	}
 
-	#[derive(Debug, Serialize, Deserialize)]
+	#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 	pub struct Response {
 		pub original_key_creator_device_pub_id: devices::Device,
 		pub devices_in_group: Vec<devices::Device>,

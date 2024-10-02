@@ -7,7 +7,7 @@ use super::MessagesCollection;
 
 pub const BATCH_SIZE: u32 = 100;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,
@@ -15,5 +15,5 @@ pub struct Request {
 	pub start_time_per_device: Vec<(devices::PubId, DateTime<Utc>)>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Response(pub Vec<MessagesCollection>);

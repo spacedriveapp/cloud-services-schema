@@ -16,7 +16,7 @@ crate::declare! {
 	custom_error = CloudP2PError
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, specta::Type)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, specta::Type)]
 pub enum CloudP2PError {
 	Rejected,
 	UnableToConnect,
