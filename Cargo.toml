@@ -71,9 +71,9 @@ specta = { version = "=2.0.0-rc.20", features = ["chrono", "uuid"] }
 # The same versions used by Spacedrive's Core
 # https://github.com/spacedriveapp/spacedrive/blob/0.4.2/Cargo.toml#L85-L87
 [dependencies.rspc]
-features = ["alpha", "chrono", "tracing", "unstable", "uuid"]
+features = ["alpha", "chrono", "unstable", "uuid"]
 git      = "https://github.com/spacedriveapp/rspc.git"
-rev      = "7308bb2ce0"
+rev      = "bc882f4724"
 
 [dev-dependencies]
 bincode = "1.3.3"
