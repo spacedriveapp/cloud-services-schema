@@ -73,7 +73,7 @@ specta = { version = "=2.0.0-rc.20", features = ["chrono", "uuid"] }
 [dependencies.rspc]
 features = ["alpha", "chrono", "unstable", "uuid"]
 git      = "https://github.com/spacedriveapp/rspc.git"
-rev      = "7c866ef63d"
+rev      = "bc882f4724"
 
 [dev-dependencies]
 bincode = "1.3"
