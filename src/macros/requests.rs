@@ -10,6 +10,7 @@ macro_rules! __declare_requests {
 		bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?
 	) => {
 		::paste::paste!{
+			#[allow(clippy::large_enum_variant)]
 			#[derive(
 				::std::fmt::Debug,
 				::serde::Serialize,
