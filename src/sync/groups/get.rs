@@ -1,5 +1,6 @@
-use crate::auth::AccessToken;
+use crate::{devices, auth::AccessToken};
 
+use iroh_base::key::NodeId;
 use serde::{Deserialize, Serialize};
 
 use super::{Group, GroupWithDevices, PubId};
@@ -8,6 +9,7 @@ use super::{Group, GroupWithDevices, PubId};
 #[specta(rename = "CloudSyncGroupGetRequestKind")]
 pub enum RequestKind {
 	WithDevices,
+	DevicesConnectionIds,
 	FullData,
 }
 
@@ -21,6 +23,7 @@ pub struct Request {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ResponseKind {
 	WithDevices(GroupWithDevices),
+	DevicesConnectionIds(Vec<(devices::PubId, NodeId)>),
 	FullData(Group),
 }
 
