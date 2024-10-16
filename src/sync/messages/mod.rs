@@ -2,13 +2,11 @@ use crate::devices;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use url::Url;
 
 crate::declare! {
 	parent = super,
-	rpc = [delete_older, get_latest_time],
+	rpc = [push, delete_older, get_latest_time],
 	server_stream = [pull],
-	bidirectional_stream = [push],
 }
 
 crate::need_auth!(delete_older, pull, push, get_latest_time);
@@ -23,8 +21,7 @@ pub struct MessagesCollection {
 	pub end_time: DateTime<Utc>,
 	pub operations_count: u32,
 	pub key_hash: KeyHash,
-	#[specta(type = String)]
-	pub signed_download_link: Url,
+	pub encrypted_messages: Vec<u8>,
 }
 
 pub mod delete_older;

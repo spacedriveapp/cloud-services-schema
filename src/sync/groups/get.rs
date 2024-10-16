@@ -1,4 +1,4 @@
-use crate::{devices, auth::AccessToken};
+use crate::{auth::AccessToken, devices};
 
 use iroh_base::key::NodeId;
 use serde::{Deserialize, Serialize};
