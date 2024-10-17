@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum Kind {
-	ForCurrentDevice,
+	ForCurrentDevice(devices::PubId),
 	ForAnyDevice,
 }
 
@@ -13,7 +13,6 @@ pub enum Kind {
 pub struct Request {
 	pub access_token: AccessToken,
 	pub group_pub_id: groups::PubId,
-	pub current_device_pub_id: devices::PubId,
 	pub kind: Kind,
 }
 
