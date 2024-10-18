@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use super::MessagesCollection;
 
-pub const BATCH_SIZE: u32 = 100;
+pub const BATCH_SIZE: u32 = 10;
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Request {
