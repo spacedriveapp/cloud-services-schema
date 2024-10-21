@@ -24,4 +24,4 @@ unknown-git      = "deny"
 unknown-registry = "deny"
 
 [sources.allow-org]
-github = ["spacedriveapp"]
+github = ["spacedriveapp", "specta-rs"]
