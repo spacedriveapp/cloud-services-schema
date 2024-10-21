@@ -34,9 +34,10 @@ pub mod auth;
 pub mod error;
 mod macros;
 
-/// A collection of utilities for working with the Spacedrive Cloud Services, although they are not
-/// part of the API, they can help a lot when working with the services, like routing and
-/// middlewares for authentication and error handling
+/// A collection of utilities for working with the Spacedrive Cloud Services
+///
+/// Although they are not part of the API, they can help a lot when working with the services,
+/// like routing and middlewares for authentication and error handling
 pub mod utils;
 
 /// Re-exporting the paste crate as the router macro needs it
