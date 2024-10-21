@@ -13,6 +13,7 @@ pub struct Request {
 }
 
 /// This response represents all devices in the sync group, along with their [`NodeId`]s.
+///
 /// So the asking device can ask for himself to join the sync group, sending a P2P message to
 /// each device in the sync group.
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
