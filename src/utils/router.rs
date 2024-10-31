@@ -15,7 +15,7 @@ macro_rules! router {
 			pub async fn route<S, E>(
 				app: $app,
 				request: $router_module::Request,
-				chan: ::quic_rpc::server::RpcChannel<S, E, $service>,
+				chan: ::quic_rpc::server::RpcChannel<$service, E, S>,
 			) -> ::eyre::Result<()>
 				where S: ::quic_rpc::Service,
 					  E: ::quic_rpc::ServiceEndpoint<S>,
@@ -31,7 +31,7 @@ macro_rules! router {
 								$crate::utils
 									::middleware
 									::error
-									::$rpc_kind::<_, _, S, E, $service, _, _, _>,
+									::$rpc_kind,
 							)
 							.await
 							.wrap_err(concat!(
@@ -52,12 +52,12 @@ macro_rules! router {
 										$crate::utils
 											::middleware
 											::auth
-											::$auth_rpc_kind::<_, _, S, E, $service, _, _, _, _, _>,
+											::$auth_rpc_kind,
 									),
 									$crate::utils
 										::middleware
 										::error
-										::$auth_rpc_kind::<_, _, S, E, $service, _, _, _>,
+										::$auth_rpc_kind,
 								)
 									.await
 									.wrap_err(concat!(

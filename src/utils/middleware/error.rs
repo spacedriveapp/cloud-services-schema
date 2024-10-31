@@ -12,18 +12,16 @@ use quic_rpc::{
 use tracing::error;
 
 /// Error handling middleware for RPC requests.
-pub async fn rpc<Args, Message, Service, Endpoint, InnerService, Route, RouteFut, Response>(
+pub async fn rpc<Args, Message, Service, Route, RouteFut, Response>(
 	(app, route): (Args, Route),
 	req: Message,
 ) -> Message::Response
 where
 	Args: Send,
-	Message: RpcMsg<InnerService>,
+	Message: RpcMsg<Service>,
 	Route: FnOnce(Args, Message) -> RouteFut + Send,
 	RouteFut: Future<Output = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<Service>,
-	InnerService: quic_rpc::Service,
 	Message::Response: From<Result<Response, Error>>,
 {
 	route(app, req).await.unwrap_or_else(|e| {
@@ -38,28 +36,28 @@ pub async fn client_streaming<
 	Message,
 	Service,
 	Endpoint,
-	InnerService,
+	ParentService,
 	Route,
 	RouteFut,
 	Response,
 >(
 	(app, route): (Args, Route),
 	req: Message,
-	update_stream: UpdateStream<Service, Endpoint, Message::Update, InnerService>,
+	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
 ) -> Message::Response
 where
 	Args: Send,
-	Message: ClientStreamingMsg<InnerService>,
+	Message: ClientStreamingMsg<Service>,
 	Route: FnOnce(
 			Args,
 			Message,
-			UpdateStream<Service, Endpoint, Message::Update, InnerService>,
+			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
 		) -> RouteFut
 		+ Send,
 	RouteFut: Future<Output = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<Service>,
-	InnerService: quic_rpc::Service,
+	ParentService: quic_rpc::Service,
+	Endpoint: ServiceEndpoint<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	route(app, req, update_stream).await.unwrap_or_else(|e| {
@@ -69,27 +67,16 @@ where
 }
 
 /// Error handling middleware for Server Streaming requests.
-pub fn server_streaming<
-	Args,
-	Message,
-	Service,
-	Endpoint,
-	InnerService,
-	Route,
-	RouteStream,
-	Response,
->(
+pub fn server_streaming<Args, Message, Service, Route, RouteStream, Response>(
 	(args, route): (Args, Route),
 	req: Message,
 ) -> impl Stream<Item = Message::Response> + Send
 where
 	Args: Send,
-	Message: ServerStreamingMsg<InnerService>,
+	Message: ServerStreamingMsg<Service>,
 	Route: FnOnce(Args, Message) -> RouteStream + Send,
 	RouteStream: Stream<Item = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<Service>,
-	InnerService: quic_rpc::Service,
 	Message::Response: From<Result<Response, Error>>,
 {
 	stream! {
@@ -113,28 +100,28 @@ pub fn bidi_streaming<
 	Message,
 	Service,
 	Endpoint,
-	InnerService,
+	ParentService,
 	Route,
 	RouteStream,
 	Response,
 >(
 	(args, route): (Args, Route),
 	req: Message,
-	update_stream: UpdateStream<Service, Endpoint, Message::Update, InnerService>,
+	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
 ) -> impl Stream<Item = Message::Response> + Send
 where
 	Args: Send,
-	Message: BidiStreamingMsg<InnerService>,
+	Message: BidiStreamingMsg<Service>,
 	Route: FnOnce(
 			Args,
 			Message,
-			UpdateStream<Service, Endpoint, Message::Update, InnerService>,
+			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
 		) -> RouteStream
 		+ Send,
 	RouteStream: Stream<Item = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<Service>,
-	InnerService: quic_rpc::Service,
+	ParentService: quic_rpc::Service,
+	Endpoint: ServiceEndpoint<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	stream! {
