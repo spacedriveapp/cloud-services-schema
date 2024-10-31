@@ -58,12 +58,13 @@ declare!(
 );
 
 /// A trait abstracting away the declared root clients in this schema
-pub trait DeclaredClient<C, S, SInner>
+pub trait DeclaredClient<Connection, ParentService, Service>
 where
-	C: quic_rpc::ServiceConnection<S>,
-	S: quic_rpc::Service,
+	Connection: quic_rpc::ServiceConnection<ParentService>,
+	ParentService: quic_rpc::Service,
+	Service: quic_rpc::Service,
 {
-	fn new(client: quic_rpc::RpcClient<S, C, SInner>) -> Self;
+	fn new(client: quic_rpc::RpcClient<Service, Connection, ParentService>) -> Self;
 }
 
 /// The cipher suite for e2e encryption with OPAQUE used by Spacedrive Cloud Services

@@ -9,7 +9,7 @@ macro_rules! __declare_client {
 		#[derive(::std::fmt::Debug, ::std::clone::Clone)]
 		pub struct Client<C, S = $service> {
 			$($nested_module: $nested_module::Client<C, S>,)*
-			client: ::quic_rpc::RpcClient<S, C, $service>,
+			client: ::quic_rpc::RpcClient<$service, C, S>,
 		}
 
 		impl<C, S> Client<C, S>
@@ -35,7 +35,7 @@ macro_rules! __declare_client {
 			C: ::quic_rpc::ServiceConnection<S>,
 			S: ::quic_rpc::Service,
 		{
-			fn new(client: ::quic_rpc::RpcClient<S, C, $service>) -> Self {
+			fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
 				Client::new(client)
 			}
 		}
@@ -48,7 +48,7 @@ macro_rules! __declare_client {
 	) => {
 		#[derive(::std::fmt::Debug, ::std::clone::Clone)]
 		pub struct Client<'c, C, S = $service> {
-			client: &'c ::quic_rpc::RpcClient<S, C, $service>,
+			client: &'c ::quic_rpc::RpcClient<$service, C, S>,
 		}
 
 		impl<'c, C, S> Client<'c, C, S>
@@ -251,7 +251,7 @@ macro_rules! __internal_client_communication_methods {
 #[macro_export]
 macro_rules! __internal_client_new_fn {
 	(inner -> $service:ty) => {
-		pub const fn new(client: &'c ::quic_rpc::RpcClient<S, C, $service>) -> Self {
+		pub const fn new(client: &'c ::quic_rpc::RpcClient<$service, C, S>) -> Self {
 			Self {
 				client,
 			}
@@ -259,7 +259,7 @@ macro_rules! __internal_client_new_fn {
 	};
 
 	($service:ty, nested = [$($nested_module:tt),+ $(,)?]) => {
-		pub fn new(client: ::quic_rpc::RpcClient<S, C, $service>) -> Self {
+		pub fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
 			Self {
 				$($nested_module: $nested_module::Client::new(client.clone().map()),)+
 				client,
@@ -269,7 +269,7 @@ macro_rules! __internal_client_new_fn {
 
 	// Without nested modules, we can have a `const fn new`
 	($service:ty, nested = []) => {
-		pub const fn new(client: ::quic_rpc::RpcClient<S, C, $service>) -> Self {
+		pub const fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
 			Self { client }
 		}
 	};
