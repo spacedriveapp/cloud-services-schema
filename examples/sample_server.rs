@@ -11,7 +11,10 @@ use quic_rpc::{
 use tokio::{spawn, task::JoinHandle};
 use uuid::Uuid;
 
-use sd_cloud_schema::{auth::AccessToken, sync, Client, Error, Request, Service};
+use sd_cloud_schema::error::ClientSideError;
+use sd_cloud_schema::{
+	auth::AccessToken, devices, libraries, sync, Client, Error, Request, Response, Service,
+};
 
 #[derive(Default)]
 pub struct App {
@@ -24,46 +27,17 @@ pub struct SyncHandler {
 }
 
 impl SyncHandler {
-	async fn sync_key(
-		self,
-		sync::get_sync_key::Request {
-			access_token: _,
-			group_id: _,
-		}: sync::get_sync_key::Request,
-	) -> Result<sync::get_sync_key::Response, Error> {
-		Ok(sync::get_sync_key::Response {
-			root_aes_key: vec![],
-			encrypted_sync_aes_key: vec![],
-		})
-	}
-
 	async fn push_sync(
 		self,
-		sync::messages::push::Request {
-			access_token: _,
-			group_id: _,
-			encrypted_sync_messages: _,
-			start_timestamp: _,
-			end_timestamp: _,
-		}: sync::messages::push::Request,
+		sync::messages::push::Request { .. }: sync::messages::push::Request,
 	) -> Result<sync::messages::push::Response, Error> {
 		Ok(sync::messages::push::Response)
-	}
-
-	async fn instance_hello(
-		self,
-		sync::instance_hello::Request {
-			access_token: _,
-			sd_instance_id: _,
-		}: sync::instance_hello::Request,
-	) -> Result<sync::instance_hello::Response, Error> {
-		Ok(sync::instance_hello::Response)
 	}
 
 	async fn handle_rpc_request<S, E>(
 		self,
 		req: sync::Request,
-		chan: RpcChannel<S, E, sync::Service>,
+		chan: RpcChannel<sync::Service, E, S>,
 	) -> Result<(), RpcServerError<impl ConnectionErrors>>
 	where
 		S: quic_rpc::Service,
@@ -75,13 +49,22 @@ impl SyncHandler {
 					chan.rpc(req, self.groups, SyncGroupsHandler::create_group)
 						.await
 				}
-				_ => unimplemented!(),
+				sync::groups::Request::Delete(_) => todo!(),
+				sync::groups::Request::Get(_) => todo!(),
+				sync::groups::Request::Leave(_) => todo!(),
+				sync::groups::Request::List(_) => todo!(),
+				sync::groups::Request::RemoveDevice(_) => todo!(),
+				sync::groups::Request::ReplyJoinRequest(_) => todo!(),
+				sync::groups::Request::RequestJoin(_) => todo!(),
 			},
-			sync::Request::GetSyncKey(req) => chan.rpc(req, self, Self::sync_key).await,
 			sync::Request::Messages(req) => match req {
 				sync::messages::Request::Push(req) => chan.rpc(req, self, Self::push_sync).await,
+				sync::messages::Request::DeleteOlder(_) => todo!(),
+				sync::messages::Request::GetLatestTime(_) => todo!(),
+				sync::messages::Request::Pull(_) => todo!(),
 			},
-			sync::Request::InstanceHello(req) => chan.rpc(req, self, Self::instance_hello).await,
+			sync::Request::SpaceFiles(_) => todo!(),
+			sync::Request::FindKeyOwners(_) => todo!(),
 		}
 	}
 }
@@ -94,19 +77,16 @@ impl SyncGroupsHandler {
 		self,
 		sync::groups::create::Request {
 			access_token: AccessToken(access_token),
-			sd_instance_id: _,
-			pgp_public_key: _,
-			encrypted_sync_aes_key: _,
+			..
 		}: sync::groups::create::Request,
 	) -> Result<sync::groups::create::Response, Error> {
 		if access_token == "unauthorized" {
-			return Err(Error::Unauthorized);
+			return Err(Error::Client(ClientSideError::Unauthorized));
 		}
 
-		Ok(sync::groups::create::Response {
-			group_id: Uuid::default(),
-			root_aes_key: vec![],
-		})
+		Ok(sync::groups::create::Response(sync::groups::PubId(
+			Uuid::default(),
+		)))
 	}
 }
 
@@ -156,7 +136,7 @@ pub fn dispatch_server<C: ServiceEndpoint<Service>>(
 async fn main() {
 	let server = App::default();
 
-	let (server_conn, client_conn) = flume::connection::<Service>(1);
+	let (server_conn, client_conn) = flume::connection::<Request, Response>(1);
 
 	let server_handle = dispatch_server(server_conn, server);
 
@@ -167,16 +147,19 @@ async fn main() {
 		.groups()
 		.create(sync::groups::create::Request {
 			access_token: AccessToken("unauthorized".to_string()),
-			sd_instance_id: Uuid::default(),
-			pgp_public_key: vec![],
-			encrypted_sync_aes_key: vec![],
+			key_hash: sync::KeyHash(String::new()),
+			library_pub_id: libraries::PubId(Uuid::default()),
+			device_pub_id: devices::PubId(Uuid::default()),
 		})
 		.await
 		.unwrap();
 
 	println!("Received response: {response:?}");
 
-	assert!(matches!(response, Err(Error::Unauthorized)));
+	assert!(matches!(
+		response,
+		Err(Error::Client(ClientSideError::Unauthorized))
+	));
 
 	server_handle.abort();
 
