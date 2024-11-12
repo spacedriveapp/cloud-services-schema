@@ -139,6 +139,7 @@ macro_rules! __declare_impl {
 
 		$crate::__declare_client_rpc_calls!(
 			$error,
+			Service,
 			rpc = [$($rpc_module,)*],
 			client_stream = [$($client_stream_module,)*],
 			server_stream = [$($server_stream_module,)*],

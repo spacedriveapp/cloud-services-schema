@@ -7,36 +7,45 @@ macro_rules! __declare_client {
 		child_clients = [$($child_module:tt),* $(,)?] $(,)?
 	) => {
 		#[derive(::std::fmt::Debug, ::std::clone::Clone)]
-		pub struct Client<C, S = $service> {
-			$($nested_module: $nested_module::Client<C, S>,)*
-			client: ::quic_rpc::RpcClient<$service, C, S>,
+		pub struct Client<C> {
+			$($nested_module: $nested_module::Client<
+				::quic_rpc::transport::mapped::MappedConnector<
+					<$nested_module::Service as ::quic_rpc::Service>::Res,
+					<$nested_module::Service as ::quic_rpc::Service>::Req,
+					C,
+				>,
+			>,)*
+			client: ::quic_rpc::RpcClient<$service, C>,
 		}
 
-		impl<C, S> Client<C, S>
+		impl<C> Client<C>
 		where
-			C: ::quic_rpc::ServiceConnection<S>,
-			S: ::quic_rpc::Service,
+			C: ::quic_rpc::Connector<$service>,
 		{
 			$crate::__internal_client_new_fn!($service, nested = [$($nested_module),*]);
 
-			$(pub const fn $nested_module(&self) -> &$nested_module::Client< C, S>
+			$(pub const fn $nested_module(&self) -> &$nested_module::Client<
+				::quic_rpc::transport::mapped::MappedConnector<
+					<$nested_module::Service as ::quic_rpc::Service>::Res,
+					<$nested_module::Service as ::quic_rpc::Service>::Req,
+					C,
+				>,>
 			{
 				&self.$nested_module
 			})*
 
-			$(pub const fn $child_module(&self) -> $child_module::Client<'_, C, S>
+			$(pub const fn $child_module(&self) -> $child_module::Client<'_, C>
 			{
 				$child_module::Client::new(&self.client)
 			})*
 		}
 
-		impl<C, S> $crate::DeclaredClient<C, S, $service> for Client<C, S>
+		impl<C> $crate::DeclaredClient<C, $service> for Client<C>
 		where
-			C: ::quic_rpc::ServiceConnection<S>,
-			S: ::quic_rpc::Service,
+			C: ::quic_rpc::Connector<$service>,
 		{
-			fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
-				Client::new(client)
+			fn new(client: ::quic_rpc::RpcClient<$service, C>) -> Self {
+				Self::new(client)
 			}
 		}
 	};
@@ -47,18 +56,17 @@ macro_rules! __declare_client {
 		child_clients = [$($child_module:tt),* $(,)?] $(,)?
 	) => {
 		#[derive(::std::fmt::Debug, ::std::clone::Clone)]
-		pub struct Client<'c, C, S = $service> {
-			client: &'c ::quic_rpc::RpcClient<$service, C, S>,
+		pub struct Client<'c, C> {
+			client: &'c ::quic_rpc::RpcClient<$service, C>,
 		}
 
-		impl<'c, C, S> Client<'c, C, S>
+		impl<'c, C> Client<'c, C>
 		where
-			C: ::quic_rpc::ServiceConnection<S>,
-			S: ::quic_rpc::Service,
+			C: ::quic_rpc::Connector<$service>,
 		{
 			$crate::__internal_client_new_fn!(inner -> $service);
 
-			$(pub const fn $child_module(&self) -> $child_module::Client<'_, C, S>
+			$(pub const fn $child_module(&self) -> $child_module::Client<'_, C>
 			{
 				$child_module::Client::new(&self.client)
 			})*
@@ -103,15 +111,15 @@ macro_rules! __declare_client_rpc_calls {
 
 	(
 		$error:ty,
+		$service:ty,
 		rpc = [$($rpc_module:tt),* $(,)?],
 		client_stream = [$($client_stream_module:tt),* $(,)?],
 		server_stream = [$($server_stream_module:tt),* $(,)?],
 		bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?
 	) => {
-		impl<C, S> Client<C, S>
+		impl<C> Client<C>
 		where
-			C: ::quic_rpc::ServiceConnection<S>,
-			S: ::quic_rpc::Service,
+			C: ::quic_rpc::Connector<$service>,
 		{
 			$crate::__internal_client_communication_methods!(
 				$error,
@@ -133,10 +141,9 @@ macro_rules! __declare_client_rpc_calls {
 		$(bidirectional_stream = [$($bidirectional_stream_module:tt),* $(,)?] $(,)?)?
 	) => {
 
-		impl<'c, C, S> Client<'c, C, S>
+		impl<'c, C> Client<'c, C>
 		where
-			C: ::quic_rpc::ServiceConnection<S>,
-			S: ::quic_rpc::Service,
+			C: ::quic_rpc::Connector<$parent::Service>,
 		{
 			$crate::__internal_client_communication_methods!(
 				$error,
@@ -183,7 +190,7 @@ macro_rules! __internal_client_communication_methods {
 					req: $client_stream_module::Request,
 				) -> Result<
 					(
-						::quic_rpc::client::UpdateSink<S, C, $client_stream_module::RequestUpdate, $service>,
+						::quic_rpc::client::UpdateSink<C, $client_stream_module::RequestUpdate>,
 						::futures_lite::future::Boxed<
 							Result<
 								Result<$client_stream_module::Response, $error>,
@@ -226,9 +233,8 @@ macro_rules! __internal_client_communication_methods {
 				) -> Result<
 					(
 						::quic_rpc::client::UpdateSink<
-							S,
 							C,
-							$bidirectional_stream_module::RequestUpdate, $service
+							$bidirectional_stream_module::RequestUpdate,
 						>,
 						::quic_rpc::client::BoxStreamSync<
 							'static,
@@ -251,7 +257,7 @@ macro_rules! __internal_client_communication_methods {
 #[macro_export]
 macro_rules! __internal_client_new_fn {
 	(inner -> $service:ty) => {
-		pub const fn new(client: &'c ::quic_rpc::RpcClient<$service, C, S>) -> Self {
+		pub const fn new(client: &'c ::quic_rpc::RpcClient<$service, C>) -> Self {
 			Self {
 				client,
 			}
@@ -259,7 +265,7 @@ macro_rules! __internal_client_new_fn {
 	};
 
 	($service:ty, nested = [$($nested_module:tt),+ $(,)?]) => {
-		pub fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
+		pub fn new(client: ::quic_rpc::RpcClient<$service, C>) -> Self {
 			Self {
 				$($nested_module: $nested_module::Client::new(client.clone().map()),)+
 				client,
@@ -269,7 +275,7 @@ macro_rules! __internal_client_new_fn {
 
 	// Without nested modules, we can have a `const fn new`
 	($service:ty, nested = []) => {
-		pub const fn new(client: ::quic_rpc::RpcClient<$service, C, S>) -> Self {
+		pub const fn new(client: ::quic_rpc::RpcClient<$service, C>) -> Self {
 			Self { client }
 		}
 	};

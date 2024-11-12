@@ -10,7 +10,6 @@ use futures_lite::{Stream, StreamExt};
 use quic_rpc::{
 	message::{BidiStreamingMsg, ClientStreamingMsg, RpcMsg, ServerStreamingMsg},
 	server::UpdateStream,
-	ServiceEndpoint,
 };
 use tracing::error;
 
@@ -62,7 +61,7 @@ pub async fn client_streaming<
 	App,
 	Message,
 	Service,
-	Endpoint,
+	Listener,
 	ParentService,
 	Route,
 	RouteFut,
@@ -72,21 +71,17 @@ pub async fn client_streaming<
 >(
 	(app, route): (App, Route),
 	req: Message,
-	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
+	update_stream: UpdateStream<Listener, Message::Update>,
 ) -> eyre::Result<Message::Response>
 where
 	App: AuthableApp<UnauthorizedError, InternalError>,
 	Message: ClientStreamingMsg<Service> + NeedAuth,
-	Route: FnOnce(
-			(App, App::Claims),
-			Message,
-			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
-		) -> RouteFut
+	Route: FnOnce((App, App::Claims), Message, UpdateStream<Listener, Message::Update>) -> RouteFut
 		+ Send,
 	RouteFut: Future<Output = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
 	ParentService: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<ParentService>,
+	Listener: quic_rpc::Listener<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 	UnauthorizedError: std::error::Error + Send + Sync + fmt::Debug + 'static,
 	InternalError: std::error::Error + Send + Sync + fmt::Debug + 'static,
@@ -173,7 +168,7 @@ pub fn bidi_streaming<
 	App,
 	Message,
 	Service,
-	Endpoint,
+	Listener,
 	ParentService,
 	Route,
 	RouteStream,
@@ -183,21 +178,17 @@ pub fn bidi_streaming<
 >(
 	(app, route): (App, Route),
 	req: Message,
-	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
+	update_stream: UpdateStream<Listener, Message::Update>,
 ) -> impl Stream<Item = eyre::Result<Message::Response>> + Send
 where
 	App: AuthableApp<UnauthorizedError, InternalError>,
 	Message: BidiStreamingMsg<Service> + NeedAuth,
-	Route: FnOnce(
-			(App, App::Claims),
-			Message,
-			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
-		) -> RouteStream
+	Route: FnOnce((App, App::Claims), Message, UpdateStream<Listener, Message::Update>) -> RouteStream
 		+ Send,
 	RouteStream: Stream<Item = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
 	ParentService: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<ParentService>,
+	Listener: quic_rpc::Listener<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 	UnauthorizedError: std::error::Error + Send + Sync + fmt::Debug + 'static,
 	InternalError: std::error::Error + Send + Sync + fmt::Debug + 'static,

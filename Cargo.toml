@@ -3,7 +3,7 @@ name    = "sd-cloud-schema"
 version = "0.1.0"
 
 authors      = ["Ericson Soares <ericson@spacedrive.com>"]
-autoexamples = true                                                    # TODO: Fix example
+autoexamples = true                                                    
 edition      = "2021"
 license      = "AGPL-3.0-only"
 repository   = "https://github.com/spacedriveapp/cloud-services-schema"

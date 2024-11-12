@@ -1,20 +1,19 @@
 #![allow(clippy::unused_async, clippy::unwrap_used)]
 
+use sd_cloud_schema::{
+	auth::AccessToken, devices, error::ClientSideError, libraries, sync, Client, Error, Request,
+	Response, Service,
+};
+
 use std::sync::Arc;
 
 use quic_rpc::{
 	server::{RpcChannel, RpcServerError},
-	transport::flume,
-	transport::ConnectionErrors,
-	RpcClient, RpcServer, ServiceEndpoint,
+	transport::{flume, mapped::MappedStreamTypes, ConnectionErrors},
+	Listener, RpcClient, RpcServer,
 };
 use tokio::{spawn, task::JoinHandle};
 use uuid::Uuid;
-
-use sd_cloud_schema::error::ClientSideError;
-use sd_cloud_schema::{
-	auth::AccessToken, devices, libraries, sync, Client, Error, Request, Response, Service,
-};
 
 #[derive(Default)]
 pub struct App {
@@ -34,15 +33,14 @@ impl SyncHandler {
 		Ok(sync::messages::push::Response)
 	}
 
-	async fn handle_rpc_request<S, E>(
+	async fn handle_rpc_request(
 		self,
 		req: sync::Request,
-		chan: RpcChannel<sync::Service, E, S>,
-	) -> Result<(), RpcServerError<impl ConnectionErrors>>
-	where
-		S: quic_rpc::Service,
-		E: ServiceEndpoint<S>,
-	{
+		chan: RpcChannel<
+			sync::Service,
+			MappedStreamTypes<sync::Request, sync::Response, impl Listener<Service>>,
+		>,
+	) -> Result<(), RpcServerError<impl ConnectionErrors>> {
 		match req {
 			sync::Request::Groups(req) => match req {
 				sync::groups::Request::Create(req) => {
@@ -91,24 +89,25 @@ impl SyncGroupsHandler {
 }
 
 impl App {
-	pub async fn handle_rpc_request<E: ServiceEndpoint<Service>>(
+	pub async fn handle_rpc_request(
 		&self,
 		req: Request,
-		chan: RpcChannel<Service, E>,
+		chan: RpcChannel<Service, impl Listener<Service>>,
 	) -> Result<(), RpcServerError<impl ConnectionErrors>> {
 		match req {
-			Request::Sync(req) => self.sync.handle_rpc_request(req, chan.map()).await?,
+			Request::Sync(req) => {
+				let map = chan.map();
+				self.sync.handle_rpc_request(req, map).await?
+			}
 			_ => unimplemented!(),
 		};
+
 		Ok(())
 	}
 }
 
-pub fn dispatch_server<C: ServiceEndpoint<Service>>(
-	server_conn: C,
-	handler: App,
-) -> JoinHandle<()> {
-	let server = RpcServer::new(server_conn);
+pub fn dispatch_server(listener: impl Listener<Service>, handler: App) -> JoinHandle<()> {
+	let server = RpcServer::new(listener);
 	let handler = Arc::new(handler);
 
 	spawn(async move {
@@ -136,7 +135,7 @@ pub fn dispatch_server<C: ServiceEndpoint<Service>>(
 async fn main() {
 	let server = App::default();
 
-	let (server_conn, client_conn) = flume::connection::<Request, Response>(1);
+	let (server_conn, client_conn) = flume::channel::<Request, Response>(1);
 
 	let server_handle = dispatch_server(server_conn, server);
 

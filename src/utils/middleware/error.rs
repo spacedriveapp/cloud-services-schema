@@ -7,7 +7,6 @@ use futures_lite::{Stream, StreamExt};
 use quic_rpc::{
 	message::{BidiStreamingMsg, ClientStreamingMsg, RpcMsg, ServerStreamingMsg},
 	server::UpdateStream,
-	ServiceEndpoint,
 };
 use tracing::error;
 
@@ -35,7 +34,7 @@ pub async fn client_streaming<
 	Args,
 	Message,
 	Service,
-	Endpoint,
+	Listener,
 	ParentService,
 	Route,
 	RouteFut,
@@ -43,21 +42,16 @@ pub async fn client_streaming<
 >(
 	(app, route): (Args, Route),
 	req: Message,
-	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
+	update_stream: UpdateStream<Listener, Message::Update>,
 ) -> Message::Response
 where
 	Args: Send,
 	Message: ClientStreamingMsg<Service>,
-	Route: FnOnce(
-			Args,
-			Message,
-			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
-		) -> RouteFut
-		+ Send,
+	Route: FnOnce(Args, Message, UpdateStream<Listener, Message::Update>) -> RouteFut + Send,
 	RouteFut: Future<Output = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
 	ParentService: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<ParentService>,
+	Listener: quic_rpc::Listener<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	route(app, req, update_stream).await.unwrap_or_else(|e| {
@@ -99,7 +93,7 @@ pub fn bidi_streaming<
 	Args,
 	Message,
 	Service,
-	Endpoint,
+	Listener,
 	ParentService,
 	Route,
 	RouteStream,
@@ -107,21 +101,16 @@ pub fn bidi_streaming<
 >(
 	(args, route): (Args, Route),
 	req: Message,
-	update_stream: UpdateStream<ParentService, Endpoint, Message::Update, Service>,
+	update_stream: UpdateStream<Listener, Message::Update>,
 ) -> impl Stream<Item = Message::Response> + Send
 where
 	Args: Send,
 	Message: BidiStreamingMsg<Service>,
-	Route: FnOnce(
-			Args,
-			Message,
-			UpdateStream<ParentService, Endpoint, Message::Update, Service>,
-		) -> RouteStream
-		+ Send,
+	Route: FnOnce(Args, Message, UpdateStream<Listener, Message::Update>) -> RouteStream + Send,
 	RouteStream: Stream<Item = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
 	ParentService: quic_rpc::Service,
-	Endpoint: ServiceEndpoint<ParentService>,
+	Listener: quic_rpc::Listener<ParentService>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	stream! {
