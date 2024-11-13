@@ -30,16 +30,7 @@ where
 }
 
 /// Error handling middleware for Client Streaming requests.
-pub async fn client_streaming<
-	Args,
-	Message,
-	Service,
-	Listener,
-	ParentService,
-	Route,
-	RouteFut,
-	Response,
->(
+pub async fn client_streaming<Args, Message, Service, Listener, Route, RouteFut, Response>(
 	(app, route): (Args, Route),
 	req: Message,
 	update_stream: UpdateStream<Listener, Message::Update>,
@@ -50,8 +41,7 @@ where
 	Route: FnOnce(Args, Message, UpdateStream<Listener, Message::Update>) -> RouteFut + Send,
 	RouteFut: Future<Output = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	ParentService: quic_rpc::Service,
-	Listener: quic_rpc::Listener<ParentService>,
+	Listener: quic_rpc::transport::StreamTypes<In = Service::Req, Out = Service::Res>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	route(app, req, update_stream).await.unwrap_or_else(|e| {
@@ -89,16 +79,7 @@ where
 }
 
 /// Error handling middleware for Bidirectional Streaming requests.
-pub fn bidi_streaming<
-	Args,
-	Message,
-	Service,
-	Listener,
-	ParentService,
-	Route,
-	RouteStream,
-	Response,
->(
+pub fn bidi_streaming<Args, Message, Service, Listener, Route, RouteStream, Response>(
 	(args, route): (Args, Route),
 	req: Message,
 	update_stream: UpdateStream<Listener, Message::Update>,
@@ -109,8 +90,7 @@ where
 	Route: FnOnce(Args, Message, UpdateStream<Listener, Message::Update>) -> RouteStream + Send,
 	RouteStream: Stream<Item = eyre::Result<Message::Response>> + Send,
 	Service: quic_rpc::Service,
-	ParentService: quic_rpc::Service,
-	Listener: quic_rpc::Listener<ParentService>,
+	Listener: quic_rpc::transport::StreamTypes<In = Service::Req, Out = Service::Res>,
 	Message::Response: From<Result<Response, Error>>,
 {
 	stream! {
