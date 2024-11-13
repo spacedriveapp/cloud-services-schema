@@ -12,15 +12,17 @@ macro_rules! router {
     ) => {
 		$crate::paste::paste! {
 			#[allow(unreachable_patterns, unused)]
-			pub async fn route<Service, Listener>(
+			pub async fn route<Listener>(
 				app: $app,
 				request: $router_module::Request,
-				chan: ::quic_rpc::server::RpcChannel<Service, Listener>,
+				chan: ::quic_rpc::server::RpcChannel<$service, Listener>,
 			) -> ::eyre::Result<()>
-				where Service: ::quic_rpc::Service,
-					  Listener: ::quic_rpc
-						  ::transport
-						  ::StreamTypes<In = Service::Req, Out = Service::Res>,
+				where Listener: ::quic_rpc
+						::transport
+						::StreamTypes<
+							In = <$service as ::quic_rpc::Service>::Req,
+							Out = <$service as ::quic_rpc::Service>::Res
+						>,
 			{
 				use ::eyre::WrapErr;
 
