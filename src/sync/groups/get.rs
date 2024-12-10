@@ -35,8 +35,8 @@ pub struct Response(pub ResponseKind);
 mod tests {
 	use crate::{devices, libraries, sync::KeyHash};
 
-	use bincode::{deserialize, serialize};
 	use iroh_base::key::SecretKey;
+	use postcard::{from_bytes, to_allocvec};
 	use uuid::Uuid;
 
 	use super::*;
@@ -49,9 +49,9 @@ mod tests {
 			kind: RequestKind::WithDevices,
 		};
 
-		let serialized = serialize(&request).unwrap();
+		let serialized = to_allocvec(&request).unwrap();
 
-		assert_eq!(request, deserialize(&serialized).unwrap());
+		assert_eq!(request, from_bytes(&serialized).unwrap());
 	}
 
 	#[test]
@@ -79,8 +79,8 @@ mod tests {
 			updated_at: chrono::Utc::now(),
 		}));
 
-		let serialized = serialize(&response).unwrap();
+		let serialized = to_allocvec(&response).unwrap();
 
-		assert_eq!(response, deserialize(&serialized).unwrap());
+		assert_eq!(response, from_bytes(&serialized).unwrap());
 	}
 }
