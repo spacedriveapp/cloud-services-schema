@@ -64,7 +64,7 @@ uuid         = { version = "1.11", features = ["serde"] }
 
 # The same versions used by Spacedrive's Core
 # https://github.com/spacedriveapp/spacedrive/blob/0.4.2/Cargo.toml#L52
-specta = { version = "=2.0.0-rc.20", features = ["chrono", "uuid"] }
+specta = { version = "=2.0.0-rc.22", features = ["chrono", "uuid"] }
 
 # The same versions used by Spacedrive's Core
 # https://github.com/spacedriveapp/spacedrive/blob/0.4.2/Cargo.toml#L85-L87
