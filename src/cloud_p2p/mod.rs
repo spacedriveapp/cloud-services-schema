@@ -25,5 +25,5 @@ pub enum CloudP2PError {
 }
 
 pub mod authorize_new_device_in_sync_group;
-pub mod notify_new_sync_messages;
 pub mod get_thumbnail;
+pub mod notify_new_sync_messages;
