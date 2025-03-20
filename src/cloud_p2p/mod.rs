@@ -13,7 +13,7 @@ impl CloudP2PALPN {
 }
 
 crate::declare! {
-	rpc = [authorize_new_device_in_sync_group, notify_new_sync_messages],
+	rpc = [authorize_new_device_in_sync_group, notify_new_sync_messages, get_thumbnail],
 	custom_error = CloudP2PError
 }
 
@@ -26,3 +26,4 @@ pub enum CloudP2PError {
 
 pub mod authorize_new_device_in_sync_group;
 pub mod notify_new_sync_messages;
+pub mod get_thumbnail;
