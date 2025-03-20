@@ -1,4 +1,4 @@
-use crate::devices;
+use crate::{devices, libraries};
 
 use serde::{Deserialize, Serialize};
 
@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 pub struct Request {
 	pub cas_id: String,
 	pub device_pub_id: devices::PubId,
+	pub library_pub_id: libraries::PubId,
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
